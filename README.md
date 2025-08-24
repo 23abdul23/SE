@@ -1,0 +1,85 @@
+📱 Mobile App Setup Guide
+This document provides setup instructions for the React Native + Expo mobile app project. Follow these steps (1–7) to fork the repo, install dependencies, configure Android Studio, and run the app on a real device or emulator.
+
+
+
+
+
+
+
+
+
+1️⃣ Fork & Clone the Repo
+Run the following commands:
+git clone https://github.com/<your-username>/<repo-name>.git
+cd ./SE
+
+eg: git clone https://github.com/23abdul23/SE.git (DO not run this)
+
+2️⃣ Setup Environment Variables
+Create a `.env` file in the root directory with the following content:
+
+(Install Mongodb and MOngoDb COmpass Alsd)
+# MongoDB connection string
+MONGODB_URI= mongodb://localhost:27017/aegis-id
+
+# JWT secret and expiration
+JWT_SECRET= secret
+JWT_EXPIRE= 7d
+
+# API_HOST=172.19.13.123 (Your IP Adress, currently had to resolve this)
+API_HOST=localhost
+# Server port
+PORT=3000
+
+
+
+3️⃣ Install Dependencies
+Run in teh SE Folder:
+npm install
+If you see dependency conflicts:
+npm install --legacy-peer-deps
+Optional: Install Expo CLI globally:
+npm install -g expo-cli
+
+4️⃣ Install Android Studio & SDK
+1. Download Android Studio: https://developer.android.com/studio
+2. During setup, install: Android SDK, Android SDK Platform Tools, Android Emulator
+3. Add Android SDK to PATH by editing ~/.bashrc or ~/.zshrc:
+
+(For Linux(ARCH), for windows edit the Environment Variables)
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+
+(Again for Linux Only)
+4. Reload shell:
+source ~/.bashrc
+
+5️⃣ Run on Android Device or Emulator
+Option A: Real Device (Try for OPTION A)
+1. Enable Developer Options on phone and enable USB Debugging
+2. Connect device via USB
+3. Verify device:
+adb devices
+
+Option B: Emulator
+1. Open Android Studio → Device Manager
+2. Create a new Virtual Device (Pixel, API 34 recommended)
+3. Start the emulator
+
+6️⃣ Start the App
+Run in the SE folder:
+npx expo start --tunnel
+Metro Bundler will start and the app will launch on your device or emulator.
+
+7️⃣ Troubleshooting
+Error: spawn adb ENOENT → Ensure adb is in your PATH.
+Device not detected → Run:
+
+adb kill-server
+adb start-server
+adb devices
+
+
+(IF any ERROR persists or Installation is DIFFICULT , contact me ASAP
+-o- Abdul)
