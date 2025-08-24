@@ -231,11 +231,11 @@ npx expo start --lan
 2. **Laptop** → Processes request → **MongoDB Database**  
 3. **Laptop** → Returns response → **Phone App**
 4. **Registration success/failure** shown on phone
-
+   
 ---
 
 ## Need Help?
 
-If you encounter any problems or installation difficulties, contact -O- Abdul ASAP.
+If you encounter any problems or installation difficulties, contact -O- Abdul ASAP (Raat me mat pareshan Karna).
 
 ---
