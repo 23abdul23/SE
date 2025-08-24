@@ -3,11 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import Constants from 'expo-constants';
 
 // Use expoConfig.extra for SDK 48+ compatibility
-const API_HOST = Constants.expoConfig?.extra?.API_HOST;
-
-const API_BASE_URL = `http://192.168.119.152:3000/api`;
-//const API_BASE_URL = `http://${API_HOST}:3000/api`;
+const YOUR_LAPTOP_IP = Constants.expoConfig?.extra?.YOUR_LAPTOP_IP;
 // Base API configuration
+const API_BASE_URL = `http://${YOUR_LAPTOP_IP}:3000/api`;
 
 console.log("Current URL: " ,API_BASE_URL)
 
