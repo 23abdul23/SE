@@ -24,9 +24,13 @@ _Do not run the above example as-is—replace with your details._
 
 
 MONGODB_URI=mongodb://localhost:27017/aegis-id
+
 JWT_SECRET=secret
+
 JWT_EXPIRE=7d
+
 API_HOST=localhost
+
 PORT=3000
 
 
@@ -39,7 +43,9 @@ PORT=3000
 In the `SE` folder, run:
 
 `npm install`
+
 `npm install --legacy-peer-deps` If some error arises
+
 `npm install -g expo-cli`
 
 
