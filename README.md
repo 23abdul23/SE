@@ -238,4 +238,5 @@ npx expo start --lan
 
 If you encounter any problems or installation difficulties, contact -O- Abdul ASAP (Raat me mat pareshan Karna).
 
+ok
 ---
