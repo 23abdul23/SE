@@ -21,6 +21,7 @@ export default function ProfileScreen() {
 
   const loadProfile = async () => {
     try {
+      console.log("user:",user)
       const response = await studentAPI.getProfile()
       setProfile(response.data)
     } catch (error) {
@@ -52,6 +53,7 @@ export default function ProfileScreen() {
     return <LoadingSpinner />
   }
 
+  console.log(user.name)
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -87,18 +89,18 @@ export default function ProfileScreen() {
                 onChangeText={(value) => updateProfile("name", value)}
               />
             ) : (
-              <Text style={styles.fieldValue}>{profile?.name}</Text>
+              <Text style={styles.fieldValue}>{user?.name}</Text>
             )}
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Email</Text>
-            <Text style={styles.fieldValue}>{profile?.email}</Text>
+            <Text style={styles.fieldValue}>{user?.email}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Student ID</Text>
-            <Text style={styles.fieldValue}>{profile?.studentId}</Text>
+            <Text style={styles.fieldValue}>{user?.studentId}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
@@ -111,7 +113,7 @@ export default function ProfileScreen() {
                 keyboardType="phone-pad"
               />
             ) : (
-              <Text style={styles.fieldValue}>{profile?.phone}</Text>
+              <Text style={styles.fieldValue}>{user?.phone}</Text>
             )}
           </View>
         </View>
