@@ -144,8 +144,8 @@ ipconfig
 ```
 
 ### Step 2: Update API Configuration
-1. Open `services/api.js` file
-2. Replace the IP address in `API_BASE_URL` with your laptop's IP:
+1. Open `.env` file
+2. Replace the IP address in `YOUR_LAPTOP_IP` with your laptop's IP OR Edit in the `./ server/api.js`
 ```javascript
 const API_BASE_URL = `http://YOUR_LAPTOP_IP:3000/api`;
 // Example: const API_BASE_URL = `http://192.168.1.100:3000/api`;
