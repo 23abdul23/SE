@@ -74,12 +74,6 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials Username" })
     }
 
-    // // Check password
-    // const isMatch = await bcrypt.compare(password, user.password)
-
-    // if (!isMatch) {
-    //   return res.status(400).json({ message: "Invalid credentials Password" })
-    // }
 
     // Update last login
     user.lastLogin = new Date()

@@ -24,16 +24,16 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-      {/* {user ? (
+      {user ? (
         <Stack.Screen name="Main" component={MainTabNavigator} />
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
         </>
-      )} */}
+      )}    
 
-      <Stack.Screen name="Main" component={MainTabNavigator} />
+      {/* <Stack.Screen name="Main" component={MainTabNavigator} /> */}
     </Stack.Navigator>
   );
 }
