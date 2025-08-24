@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 // Use expoConfig.extra for SDK 48+ compatibility
 const API_HOST = Constants.expoConfig?.extra?.API_HOST;
 
-const API_BASE_URL = `http://172.19.13.123:3000/api`;
+const API_BASE_URL = `http://192.168.119.152:3000/api`;
 //const API_BASE_URL = `http://${API_HOST}:3000/api`;
 // Base API configuration
 
