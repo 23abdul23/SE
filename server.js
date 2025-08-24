@@ -15,6 +15,7 @@ const outpassRoutes = require("./routes/outpassRoutes")
 const emergencyRoutes = require("./routes/emergencyRoutes")
 const adminRoutes = require("./routes/adminRoutes")
 const securityRoutes = require("./routes/securityRoutes")
+const studentRoutes = require("./routes/studentRoutes")
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -64,6 +65,7 @@ app.use("/api/outpass", outpassRoutes)
 app.use("/api/emergency", emergencyRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/security", securityRoutes)
+app.use("/api/student", studentRoutes)
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
