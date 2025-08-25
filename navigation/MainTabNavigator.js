@@ -26,7 +26,13 @@ export default function MainTabNavigator() {
             iconName = focused ? "warning" : "warning-outline"
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline"
+          } else if (route.name === "Library") {
+            iconName = focused ? "book" : "book-outline"
+          } else if (route.name === "SAC") {
+            iconName = focused ? "bicycle" : "bicycle-outline"
           }
+
+
 
           return <Ionicons name={iconName} size={size} color={color} />
         },
@@ -39,8 +45,6 @@ export default function MainTabNavigator() {
       <Tab.Screen name="Outpass" component={OutpassScreen} />
       <Tab.Screen name="Emergency" component={EmergencyScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Library" component={Library} />
-      <Tab.Screen name="SAC" component={SAC} />
     </Tab.Navigator>
   )
 }

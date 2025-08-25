@@ -6,6 +6,9 @@ import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
 import { studentAPI } from "../services/api"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
+
+import styles from "../styles/DashboardStyles"
+
 import LoadingSpinner from "../components/LoadingSpinner"
 import PasskeyCard from "../components/PasskeyCard"
 import QuickStatsCard from "../components/QuickStatsCard"
@@ -87,25 +90,32 @@ export default function DashboardScreen({ navigation }) {
         {/* Daily Passkey Card */}
         <PasskeyCard passkey={passkey} onRefresh={loadDashboardData} />
 
-        {/* Quick Stats */}
-        <QuickStatsCard stats={stats} />
 
         {/* Quick Actions */}
         <View style={styles.quickActions}>
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.actionsGrid}>
-            <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate("Outpass")}>
-              <View style={[styles.actionIcon, { backgroundColor: COLORS.primary + "20" }]}>
-                <Ionicons name="document-text" size={24} color={COLORS.primary} />
+
+
+            <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate("Scan")}>
+              <View style={[styles.actionIcon, { backgroundColor: COLORS.success + "20" }]}>
+                <Ionicons name="scan" size={24} color={COLORS.success} />
               </View>
-              <Text style={styles.actionText}>Request Outpass</Text>
+              <Text style={styles.actionText}>Scan</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate("Emergency")}>
-              <View style={[styles.actionIcon, { backgroundColor: COLORS.error + "20" }]}>
-                <Ionicons name="warning" size={24} color={COLORS.error} />
+            <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate("Library")}>
+              <View style={[styles.actionIcon, { backgroundColor: COLORS.primary + "20" }]}>
+                <Ionicons name="book" size={24} color={COLORS.primary} />
               </View>
-              <Text style={styles.actionText}>Emergency</Text>
+              <Text style={styles.actionText}>Library</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate("SAC")}>
+              <View style={[styles.actionIcon, { backgroundColor: COLORS.error + "20" }]}>
+                <Ionicons name="bicycle" size={24} color={COLORS.secondary} />
+              </View>
+              <Text style={styles.actionText}>SAC</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate("Profile")}>
@@ -115,15 +125,6 @@ export default function DashboardScreen({ navigation }) {
               <Text style={styles.actionText}>Profile</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.actionCard}
-              onPress={() => Alert.alert("Info", "Contact security for assistance")}
-            >
-              <View style={[styles.actionIcon, { backgroundColor: COLORS.warning + "20" }]}>
-                <Ionicons name="help-circle" size={24} color={COLORS.warning} />
-              </View>
-              <Text style={styles.actionText}>Help</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -138,88 +139,3 @@ const getGreeting = () => {
   return "Evening"
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  header: {
-    backgroundColor: COLORS.primary,
-    paddingTop: 50,
-    paddingBottom: SPACING.lg,
-    paddingHorizontal: SPACING.lg,
-  },
-  headerContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  greeting: {
-    fontSize: SIZES.md,
-    fontFamily: FONTS.regular,
-    color: COLORS.white,
-    opacity: 0.8,
-  },
-  userName: {
-    fontSize: SIZES.xl,
-    fontFamily: FONTS.bold,
-    color: COLORS.white,
-    marginTop: SPACING.xs,
-  },
-  studentId: {
-    fontSize: SIZES.sm,
-    fontFamily: FONTS.regular,
-    color: COLORS.white,
-    opacity: 0.8,
-    marginTop: SPACING.xs,
-  },
-  logoutButton: {
-    backgroundColor: COLORS.white + "20",
-    padding: SPACING.sm,
-    borderRadius: 8,
-  },
-  content: {
-    padding: SPACING.lg,
-  },
-  sectionTitle: {
-    fontSize: SIZES.lg,
-    fontFamily: FONTS.bold,
-    color: COLORS.gray[800],
-    marginBottom: SPACING.md,
-  },
-  quickActions: {
-    marginTop: SPACING.lg,
-  },
-  actionsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  actionCard: {
-    width: "48%",
-    backgroundColor: COLORS.white,
-    padding: SPACING.md,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: SPACING.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: SPACING.sm,
-  },
-  actionText: {
-    fontSize: SIZES.sm,
-    fontFamily: FONTS.regular,
-    color: COLORS.gray[700],
-    textAlign: "center",
-  },
-})
