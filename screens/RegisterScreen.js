@@ -27,12 +27,6 @@ export default function RegisterScreen({ navigation }) {
 
   const randomDeviceId = Math.floor(100000 + Math.random() * 900000);
 
-  // console.log("📱 Device Model:", Device.modelName);
-  // console.log("⚙️ OS Name:", Device.osName);
-  // console.log("⚙️ OS Version:", Device.osVersion);
-  // console.log("🔑 Unique ID:", Application.androidId ?? Application.applicationId);
-
-
   const [formData, setFormData] = useState({
     name: "Abdul Azeem",
     email: "23abdul23@gmail.com",

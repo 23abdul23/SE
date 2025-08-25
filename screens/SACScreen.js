@@ -1,16 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet , SPACING} from 'react-native';
-import { COLORS, FONTS, SIZES } from '../utils/constants';
+import { View, Text, StyleSheet } from 'react-native';
+import { COLORS, FONTS, SIZES , SPACING} from '../utils/constants';
 
-export default function Library() {
+export default function SAC() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Aegis ID</Text>
-      <Text style={styles.subtitle}>Library</Text>
+      <Text style={styles.subtitle}>SAC</Text>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {

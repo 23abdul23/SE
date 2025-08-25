@@ -6,6 +6,8 @@ import DashboardScreen from "../screens/DashboardScreen"
 import OutpassScreen from "../screens/OutpassScreen"
 import EmergencyScreen from "../screens/EmergencyScreen"
 import ProfileScreen from "../screens/ProfileScreen"
+import Library from "../screens/LibraryScreen"
+import SAC from "../screens/SACScreen"
 
 const Tab = createBottomTabNavigator()
 
@@ -37,6 +39,8 @@ export default function MainTabNavigator() {
       <Tab.Screen name="Outpass" component={OutpassScreen} />
       <Tab.Screen name="Emergency" component={EmergencyScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Library" component={Library} />
+      <Tab.Screen name="SAC" component={SAC} />
     </Tab.Navigator>
   )
 }
