@@ -78,6 +78,7 @@
     "react-dom": "^19",
     "react-hook-form": "^7.60.0",
     "react-native": "latest",
+    "react-native-css-transformer": "^2.0.0",
     "react-native-device-info": "^14.0.4",
     "react-native-gesture-handler": "latest",
     "react-native-qrcode-svg": "latest",

@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet , SPACING} from 'react-native';
-import { COLORS, FONTS, SIZES } from '../utils/constants';
+import React from "react";
+import { View, Text } from "react-native";
+import styles from "../styles/LibraryStyles";
 
 export default function Library() {
   return (
@@ -10,11 +10,3 @@ export default function Library() {
     </View>
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  }
-})

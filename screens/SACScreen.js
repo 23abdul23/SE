@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { COLORS, FONTS, SIZES , SPACING} from '../utils/constants';
+import { View, Text } from "react-native";
+import styles from '../styles/SACStyles'
 
 export default function SAC() {
   return (
@@ -10,10 +10,3 @@ export default function SAC() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  }
-})
