@@ -25,20 +25,27 @@ function RootNavigator() {
   
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* {user ? (
-        <Stack.Screen name="Main" component={MainTabNavigator} />
+      {user ? (
+        <>
+          <Stack.Screen name="Main" component={MainTabNavigator} />
+          <Stack.Screen name="SAC" component={SACScreen} />
+          <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
+          <Stack.Screen name="Scan" component={Scanner} />  
+        </>  
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
         </>
-      )} */}
+      )}
 
-
-      <Stack.Screen name="Main" component={MainTabNavigator} />
+      {/* <Stack.Screen name="Main" component={MainTabNavigator} />
       <Stack.Screen name="SAC" component={SACScreen} />
       <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
-      <Stack.Screen name="Scan" component={Scanner} />      
+      <Stack.Screen name="Scan" component={Scanner} />   */}
+
+
+      
     </Stack.Navigator>
   );
 }

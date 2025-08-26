@@ -15,7 +15,8 @@ import { useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { useTheme } from "../context/ThemeContext"
 import DateTimePicker from "@react-native-community/datetimepicker"
-import { studentAPI } from "../services/api"
+import { outpass, studentAPI } from "../services/api"
+import {useAuth} from "../context/AuthContext"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 import LoadingSpinner from "../components/LoadingSpinner"
 
@@ -23,15 +24,20 @@ import styles from "../styles/CreateOutpassStyles"
 
 export default function CreateOutpassScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
+  const { user, logout } = useAuth()
   const [formData, setFormData] = useState({
-    purpose: "",
-    destination: "",
-    fromDate: new Date(),
-    fromTime: new Date(),
-    toDate: new Date(),
-    toTime: new Date(),
-    emergencyContact: "",
-    remarks: "",
+    purpose: "Going out",
+    destination: "Cafe",
+    // fromDate: new Date(),
+    // fromTime: new Date(),
+    // toDate: new Date(),
+    // toTime: new Date(),
+    fromDate: new Date("2025-08-01"),          // 1st Aug 2025
+    fromTime: new Date("2025-08-01T09:30:00"), // 9:30 AM
+    toDate: new Date("2025-08-05"),            // 5th Aug 2025
+    toTime: new Date("2025-08-05T18:00:00"),
+    emergencyContact: "8909627048",
+    remarks: "Nothing",
   })
   const [showDatePicker, setShowDatePicker] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -78,11 +84,13 @@ export default function CreateOutpassScreen({ navigation }) {
 
     setLoading(true)
     try {
-      await studentAPI.createOutpass(formData)
+      console.log(user)
+      await outpass.createOutpass(formData)
       Alert.alert("Success", "Outpass request submitted successfully", [
         { text: "OK", onPress: () => navigation.goBack() },
       ])
-    } catch (error) {
+    } 
+    catch (error) {
       Alert.alert("Error", error.response?.data?.message || "Failed to create outpass")
     } finally {
       setLoading(false)

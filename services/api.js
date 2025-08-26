@@ -4,8 +4,8 @@ import Constants from 'expo-constants';
 
 const API_HOST = Constants.expoConfig?.extra?.API_HOST || "localhost";
 
-//const API_BASE_URL = `http://10.182.142.171:3000/api`;
-const API_BASE_URL = `http://${API_HOST}:3000/api`;
+const API_BASE_URL = `http://10.182.142.171:3000/api`;
+//const API_BASE_URL = `http://${API_HOST}:3000/api`;
 // Base API configuration
 
 console.log("Current URL: " ,API_BASE_URL)
@@ -53,10 +53,13 @@ export const authAPI = {
 export const studentAPI = {
   getProfile: () => api.get("/student/profile"),
   updateProfile: (data) => api.put("/student/profile", data),
+}
+
+export const outpass = {
   getDailyPasskey: () => api.get("/student/passkey"),
-  getOutpasses: () => api.get("/student/outpasses"),
-  createOutpass: (data) => api.post("/student/outpass", data),
-  updateOutpass: (id, data) => api.put(`/student/outpass/${id}`, data),
+  getOutpasses: () => api.get("/outpasses"),
+  createOutpass: (data) => api.post("/outpass/generate", data),
+  updateOutpass: (id, data) => api.put(`/outpass/${id}`, data),
 }
 
 // Emergency API endpoints

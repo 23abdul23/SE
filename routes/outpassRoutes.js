@@ -194,6 +194,7 @@ router.put("/admin/:id/status", [authenticate, adminAuth], async (req, res) => {
 // Generate outpass (valid for current day only)
 router.post("/generate", authenticate, async (req, res) => {
   try {
+    console.log("I am inside")
     const { reason, destination, exitTime, expectedReturnTime, emergencyContact } = req.body
 
     // Validate input
