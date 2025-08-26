@@ -8,7 +8,11 @@ import MainTabNavigator from './navigation/MainTabNavigator';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LoadingScreen from './screens/LoadingScreen';
+
 import SACScreen from './screens/SACScreen';
+
+import CreateOutpassScreen from "./screens/CreateOutpassScreen"
+import Scanner from './screens/ScannerScreen';
 
 const Stack = createStackNavigator();
 
@@ -30,8 +34,11 @@ function RootNavigator() {
         </>
       )} */}
 
+
       <Stack.Screen name="Main" component={MainTabNavigator} />
       <Stack.Screen name="SAC" component={SACScreen} />
+      <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
+      <Stack.Screen name="Scan" component={Scanner} />      
     </Stack.Navigator>
   );
 }

@@ -225,6 +225,11 @@ npx expo start --tunnel
 # Or use direct connection
 npx expo start --lan
 ```
+**Some npm related Issues:**
+- run `npm install -g expo-cli`
+- run `npm install`
+- run `npx expo install expo-camera`
+
 
 ### Expected Flow
 1. **Phone** → Sends registration data → **Laptop API**
