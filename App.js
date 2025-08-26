@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { ScrollView, Platform, StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext'; // Make sure to import ThemeProvider
 import MainTabNavigator from './navigation/MainTabNavigator';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -15,15 +15,12 @@ const Stack = createStackNavigator();
 function RootNavigator() {
   const { user, loading } = useAuth();
 
-
   if (loading) {
     return <LoadingScreen />;
   }
   
-
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-
       {/* {user ? (
         <Stack.Screen name="Main" component={MainTabNavigator} />
       ) : (
@@ -39,9 +36,7 @@ function RootNavigator() {
   );
 }
 
-
 export default function App() {
-  // For web, wrap in ScrollView to enable scrolling
   const content = (
     <AuthProvider>
       <NavigationContainer>
@@ -49,14 +44,22 @@ export default function App() {
       </NavigationContainer>
     </AuthProvider>
   );
+  
   if (Platform.OS === 'web') {
     return (
-      <ScrollView contentContainerStyle={styles.webContainer} style={{ flex: 1 }}>
-        <View style={styles.inner}>{content}</View>
-      </ScrollView>
+      <ThemeProvider>
+        <ScrollView contentContainerStyle={styles.webContainer} style={{ flex: 1 }}>
+          <View style={styles.inner}>{content}</View>
+        </ScrollView>
+      </ThemeProvider>
     );
   }
-  return content;
+
+  return (
+    <ThemeProvider>
+      {content}
+    </ThemeProvider>
+  );
 }
 
 const styles = StyleSheet.create({
