@@ -57,6 +57,7 @@
     "embla-carousel-react": "8.5.1",
     "expo": "^53.0.20",
     "expo-application": "^6.1.5",
+    "expo-barcode-scanner": "^13.0.1",
     "expo-device": "~7.1.4",
     "expo-font": "latest",
     "expo-location": "latest",
@@ -93,7 +94,8 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "3.25.67"
+    "zod": "3.25.67",
+    "expo-camera": "~16.1.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

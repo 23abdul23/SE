@@ -8,7 +8,6 @@ const API_HOST = Constants.expoConfig?.extra?.API_HOST || "localhost";
 const API_BASE_URL = `http://${API_HOST}:3000/api`;
 // Base API configuration
 
-console.log("hahahaha")
 console.log("Current URL: " ,API_BASE_URL)
 
 const api = axios.create({

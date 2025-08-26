@@ -11,7 +11,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import LoadingScreen from './screens/LoadingScreen';
 
 import CreateOutpassScreen from "./screens/CreateOutpassScreen"
-
+import Scanner from './screens/ScannerScreen';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +37,7 @@ function RootNavigator() {
       )}
 
       <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
+      <Stack.Screen name="Scan" component={Scanner} />
       
     </Stack.Navigator>
   );
