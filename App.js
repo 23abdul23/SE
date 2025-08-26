@@ -4,19 +4,17 @@ import { ScrollView, Platform, StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LoadingScreen from './screens/LoadingScreen';
-
-import CreateOutpassScreen from "./screens/CreateOutpassScreen"
-
+import SACScreen from './screens/SACScreen';
 
 const Stack = createStackNavigator();
 
 function RootNavigator() {
   const { user, loading } = useAuth();
+
 
   if (loading) {
     return <LoadingScreen />;
@@ -25,19 +23,18 @@ function RootNavigator() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Main" component={MainTabNavigator} />
 
-      {user ? (
+      {/* {user ? (
         <Stack.Screen name="Main" component={MainTabNavigator} />
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
         </>
-      )}
+      )} */}
 
-      <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
-      
+      <Stack.Screen name="Main" component={MainTabNavigator} />
+      <Stack.Screen name="SAC" component={SACScreen} />
     </Stack.Navigator>
   );
 }
@@ -47,11 +44,9 @@ export default function App() {
   // For web, wrap in ScrollView to enable scrolling
   const content = (
     <AuthProvider>
-      <ThemeProvider>
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
-      </ThemeProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
     </AuthProvider>
   );
   if (Platform.OS === 'web') {
