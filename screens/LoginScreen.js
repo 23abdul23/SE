@@ -13,11 +13,13 @@ import {
 } from "react-native"
 import { useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
+import { useTheme } from "../context/ThemeContext"
 import { useAuth } from "../context/AuthContext"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 import LoadingSpinner from "../components/LoadingSpinner"
 
 export default function LoginScreen({ navigation }) {
+  const { isDarkMode, toggleTheme, colors } = useTheme();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -44,19 +46,25 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+    <KeyboardAvoidingView style={[styles.container, { backgroundColor: colors.background }]} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
+          <TouchableOpacity onPress={toggleTheme} style={{ padding: 8, alignSelf: 'flex-end' }}>
+            <Ionicons name={isDarkMode ? 'sunny' : 'moon'} size={24} color={colors.text} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.header}>
-          <Text style={styles.title}>Aegis ID</Text>
-          <Text style={styles.subtitle}>Digital Campus Pass</Text>
+          <Text style={[styles.title, { color: colors.text }]}>Aegis ID</Text>
+          <Text style={[styles.subtitle, { color: colors.text }]}>Digital Campus Pass</Text>
         </View>
 
         <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={20} color={COLORS.gray[400]} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+            <Ionicons name="mail-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
               placeholder="Email Address"
+              placeholderTextColor={colors.text}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -65,37 +73,38 @@ export default function LoginScreen({ navigation }) {
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={20} color={COLORS.gray[400]} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+            <Ionicons name="lock-closed-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
               placeholder="Password"
+              placeholderTextColor={colors.text}
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
               autoComplete="password"
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
-              <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color={COLORS.gray[400]} />
+              <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Sign In</Text>
+          <TouchableOpacity style={[styles.loginButton, { backgroundColor: isDarkMode ? '#2196f3' : '#2196f3' }]} onPress={handleLogin}>
+            <Text style={[styles.loginButtonText, { color: colors.text }]}>Sign In</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.forgotPassword}
             onPress={() => Alert.alert("Info", "Contact admin to reset password")}
           >
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            <Text style={[styles.forgotPasswordText, { color: colors.text }]}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.signUpText}>Sign Up</Text>
+          <Text style={[styles.footerText, { color: colors.text }]}>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}> 
+            <Text style={[styles.signUpText, { color: colors.text }]}>Sign Up</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -2,6 +2,7 @@
 
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from "react-native"
 import { useState, useEffect } from "react"
+import { useTheme } from "../context/ThemeContext"
 import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
 import { studentAPI } from "../services/api"
@@ -9,6 +10,7 @@ import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 import LoadingSpinner from "../components/LoadingSpinner"
 
 export default function ProfileScreen() {
+  const { isDarkMode, toggleTheme, colors } = useTheme();
   const { user, logout } = useAuth()
   const [profile, setProfile] = useState(null)
   const [editing, setEditing] = useState(false)
@@ -53,105 +55,109 @@ export default function ProfileScreen() {
     return <LoadingSpinner />
   }
 
-  console.log(user.name)
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}> 
+      <View style={[styles.header, { backgroundColor: colors.card }]}> 
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
+          <TouchableOpacity onPress={toggleTheme} style={{ padding: 8, alignSelf: 'flex-end' }}>
+            <Ionicons name={isDarkMode ? 'sunny' : 'moon'} size={24} color={colors.text} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.avatarContainer}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{profile?.name?.charAt(0)?.toUpperCase() || "U"}</Text>
+          <View style={[styles.avatar, { backgroundColor: colors.background + '20' }]}> 
+            <Text style={[styles.avatarText, { color: colors.text }]}>{profile?.name?.charAt(0)?.toUpperCase() || "U"}</Text>
           </View>
-          <Text style={styles.userName}>{profile?.name}</Text>
-          <Text style={styles.userRole}>{profile?.role?.toUpperCase()}</Text>
+          <Text style={[styles.userName, { color: colors.text }]}>{profile?.name}</Text>
+          <Text style={[styles.userRole, { color: colors.text, opacity: 0.8 }]}>{profile?.role?.toUpperCase()}</Text>
         </View>
       </View>
 
       <View style={styles.content}>
-        <View style={styles.section}>
+        <View style={[styles.section, { backgroundColor: colors.card }]}> 
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Personal Information</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Personal Information</Text>
             <TouchableOpacity
               style={styles.editButton}
               onPress={() => (editing ? handleSave() : setEditing(true))}
               disabled={saving}
             >
-              <Ionicons name={editing ? "checkmark" : "pencil"} size={20} color={COLORS.primary} />
-              <Text style={styles.editButtonText}>{editing ? (saving ? "Saving..." : "Save") : "Edit"}</Text>
+              <Ionicons name={editing ? "checkmark" : "pencil"} size={20} color={colors.text} />
+              <Text style={[styles.editButtonText, { color: colors.text }]}>{editing ? (saving ? "Saving..." : "Save") : "Edit"}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Full Name</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Full Name</Text>
             {editing ? (
               <TextInput
-                style={styles.fieldInput}
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
                 value={profile?.name || ""}
                 onChangeText={(value) => updateProfile("name", value)}
               />
             ) : (
-              <Text style={styles.fieldValue}>{user?.name}</Text>
+              <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.name}</Text>
             )}
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Email</Text>
-            <Text style={styles.fieldValue}>{user?.email}</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Email</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.email}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Student ID</Text>
-            <Text style={styles.fieldValue}>{user?.studentId}</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Student ID</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.studentId}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Phone Number</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Phone Number</Text>
             {editing ? (
               <TextInput
-                style={styles.fieldInput}
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
                 value={profile?.phone || ""}
                 onChangeText={(value) => updateProfile("phone", value)}
                 keyboardType="phone-pad"
               />
             ) : (
-              <Text style={styles.fieldValue}>{user?.phone}</Text>
+              <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.phone}</Text>
             )}
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Academic Information</Text>
+        <View style={[styles.section, { backgroundColor: colors.card }]}> 
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Academic Information</Text>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Department</Text>
-            <Text style={styles.fieldValue}>{profile?.department}</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Department</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.department}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Year</Text>
-            <Text style={styles.fieldValue}>{profile?.year}</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Year</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.year}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Hostel</Text>
-            <Text style={styles.fieldValue}>{profile?.hostel}</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Hostel</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.hostel}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Room Number</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Room Number</Text>
             {editing ? (
               <TextInput
-                style={styles.fieldInput}
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
                 value={profile?.roomNumber || ""}
                 onChangeText={(value) => updateProfile("roomNumber", value)}
               />
             ) : (
-              <Text style={styles.fieldValue}>{profile?.roomNumber || "Not specified"}</Text>
+              <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.roomNumber || "Not specified"}</Text>
             )}
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account Status</Text>
+        <View style={[styles.section, { backgroundColor: colors.card }]}> 
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Account Status</Text>
 
           <View style={styles.statusContainer}>
             <View style={styles.statusItem}>
@@ -159,23 +165,23 @@ export default function ProfileScreen() {
                 style={[
                   styles.statusDot,
                   {
-                    backgroundColor: profile?.isActive ? COLORS.success : COLORS.error,
+                    backgroundColor: profile?.isActive ? '#4caf50' : '#f44336',
                   },
                 ]}
               />
-              <Text style={styles.statusText}>{profile?.isActive ? "Active" : "Inactive"}</Text>
+              <Text style={[styles.statusText, { color: colors.text }]}>{profile?.isActive ? "Active" : "Inactive"}</Text>
             </View>
 
             <View style={styles.statusItem}>
-              <Text style={styles.statusLabel}>Member since</Text>
-              <Text style={styles.statusValue}>{new Date(profile?.createdAt).toLocaleDateString()}</Text>
+              <Text style={[styles.statusLabel, { color: colors.text }]}>Member since</Text>
+              <Text style={[styles.statusValue, { color: colors.text }]}>{new Date(profile?.createdAt).toLocaleDateString()}</Text>
             </View>
           </View>
         </View>
 
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Ionicons name="log-out-outline" size={20} color={COLORS.error} />
-          <Text style={styles.logoutButtonText}>Logout</Text>
+        <TouchableOpacity style={[styles.logoutButton, { backgroundColor: isDarkMode ? '#f4433620' : COLORS.error + '10' }]} onPress={logout}>
+          <Ionicons name="log-out-outline" size={20} color={isDarkMode ? '#f44336' : COLORS.error} />
+          <Text style={[styles.logoutButtonText, { color: isDarkMode ? '#f44336' : COLORS.error }]}>Logout</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -185,10 +191,8 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   header: {
-    backgroundColor: COLORS.primary,
     paddingTop: 50,
     paddingBottom: SPACING.xl,
     alignItems: "center",
@@ -200,7 +204,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: COLORS.white + "20",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: SPACING.md,
@@ -208,25 +211,21 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: SIZES.xxxl,
     fontFamily: FONTS.bold,
-    color: COLORS.white,
   },
   userName: {
     fontSize: SIZES.xl,
     fontFamily: FONTS.bold,
-    color: COLORS.white,
     marginBottom: SPACING.xs,
   },
   userRole: {
     fontSize: SIZES.sm,
     fontFamily: FONTS.regular,
-    color: COLORS.white,
     opacity: 0.8,
   },
   content: {
     padding: SPACING.lg,
   },
   section: {
-    backgroundColor: COLORS.white,
     borderRadius: 12,
     padding: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -245,12 +244,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: SIZES.lg,
     fontFamily: FONTS.bold,
-    color: COLORS.gray[800],
   },
   editButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.primary + "10",
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xs,
     borderRadius: 6,
@@ -258,7 +255,6 @@ const styles = StyleSheet.create({
   editButtonText: {
     fontSize: SIZES.sm,
     fontFamily: FONTS.regular,
-    color: COLORS.primary,
     marginLeft: SPACING.xs,
   },
   fieldContainer: {
@@ -267,20 +263,16 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: SIZES.sm,
     fontFamily: FONTS.regular,
-    color: COLORS.gray[600],
     marginBottom: SPACING.xs,
   },
   fieldValue: {
     fontSize: SIZES.md,
     fontFamily: FONTS.regular,
-    color: COLORS.gray[800],
   },
   fieldInput: {
     fontSize: SIZES.md,
     fontFamily: FONTS.regular,
-    color: COLORS.gray[800],
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary,
     paddingVertical: SPACING.xs,
   },
   statusContainer: {
@@ -301,24 +293,20 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: SIZES.md,
     fontFamily: FONTS.regular,
-    color: COLORS.gray[800],
   },
   statusLabel: {
     fontSize: SIZES.sm,
     fontFamily: FONTS.regular,
-    color: COLORS.gray[600],
     marginRight: SPACING.xs,
   },
   statusValue: {
     fontSize: SIZES.sm,
     fontFamily: FONTS.regular,
-    color: COLORS.gray[800],
   },
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.error + "10",
     paddingVertical: SPACING.md,
     borderRadius: 12,
     marginTop: SPACING.lg,
@@ -326,7 +314,6 @@ const styles = StyleSheet.create({
   logoutButtonText: {
     fontSize: SIZES.md,
     fontFamily: FONTS.bold,
-    color: COLORS.error,
     marginLeft: SPACING.xs,
   },
 })

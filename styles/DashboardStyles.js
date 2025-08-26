@@ -38,7 +38,7 @@ export default StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: COLORS.white + "20",
-    padding: SPACING.sm,
+    marginTop : 15,
     borderRadius: 8,
   },
   content: {

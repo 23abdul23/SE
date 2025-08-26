@@ -1,13 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { COLORS, FONTS, SIZES } from '../utils/constants';
+import { useTheme } from "../context/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoadingScreen() {
+  const { isDarkMode, toggleTheme, colors } = useTheme();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Aegis ID</Text>
-      <Text style={styles.subtitle}>Digital Campus Pass</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
+        <TouchableOpacity onPress={toggleTheme} style={{ padding: 8, alignSelf: 'flex-end' }}>
+          <Ionicons name={isDarkMode ? 'sunny' : 'moon'} size={24} color={colors.text} />
+        </TouchableOpacity>
+      </View>
+      <Text style={[styles.title, { color: colors.text }]}>Aegis ID</Text>
+      <Text style={[styles.subtitle, { color: colors.text }]}>Digital Campus Pass</Text>
       <LoadingSpinner />
     </View>
   );
