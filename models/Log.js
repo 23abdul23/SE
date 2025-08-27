@@ -9,7 +9,7 @@ const logSchema = new mongoose.Schema(
     },
     action: {
       type: String,
-      enum: ["entry", "exit", "scan_attempt", "outpass_request", "emergency_alert"],
+      enum: ["entry", "exit", "scan_attempt", "outpass_request","outpass_generated", "emergency_alert"],
       required: true,
     },
     location: {

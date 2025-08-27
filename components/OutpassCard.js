@@ -41,17 +41,18 @@ export default function OutpassCard({ outpass, onUpdate }) {
   }
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
+    return new Date(dateString).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
       year: "numeric",
     })
   }
 
   const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString("en-US", {
+    return new Date(dateString).toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
+      second: "2-digit",
     })
   }
 
@@ -93,7 +94,8 @@ export default function OutpassCard({ outpass, onUpdate }) {
       </View>
 
       <View style={styles.cardContent}>
-        <Text style={styles.purpose}>{outpass.purpose}</Text>
+        {/* ✅ backend sends "reason", so fallback to that if "purpose" missing */}
+        <Text style={styles.purpose}>{outpass.purpose || outpass.reason}</Text>
         <Text style={styles.destination}>{outpass.destination}</Text>
 
         <View style={styles.timeContainer}>
@@ -101,7 +103,8 @@ export default function OutpassCard({ outpass, onUpdate }) {
             <Ionicons name="calendar-outline" size={16} color={COLORS.gray[600]} />
             <Text style={styles.timeLabel}>From</Text>
             <Text style={styles.timeValue}>
-              {formatDate(outpass.fromDate)} at {formatTime(outpass.fromTime)}
+              {formatDate(outpass.fromDate || outpass.outDate)} at{" "}
+              {formatTime(outpass.fromTime || outpass.outDate)}
             </Text>
           </View>
 
@@ -109,7 +112,8 @@ export default function OutpassCard({ outpass, onUpdate }) {
             <Ionicons name="calendar-outline" size={16} color={COLORS.gray[600]} />
             <Text style={styles.timeLabel}>To</Text>
             <Text style={styles.timeValue}>
-              {formatDate(outpass.toDate)} at {formatTime(outpass.toTime)}
+              {formatDate(outpass.toDate || outpass.expectedReturnDate)} at{" "}
+              {formatTime(outpass.toTime || outpass.expectedReturnDate)}
             </Text>
           </View>
         </View>
@@ -117,7 +121,12 @@ export default function OutpassCard({ outpass, onUpdate }) {
         {outpass.emergencyContact && (
           <View style={styles.contactContainer}>
             <Ionicons name="call-outline" size={16} color={COLORS.gray[600]} />
-            <Text style={styles.contactText}>Emergency: {outpass.emergencyContact}</Text>
+            <Text style={styles.contactText}>
+              Emergency:{" "}
+              {typeof outpass.emergencyContact === "object"
+                ? `${outpass.emergencyContact.name} (${outpass.emergencyContact.phone})`
+                : outpass.emergencyContact}
+            </Text>
           </View>
         )}
 

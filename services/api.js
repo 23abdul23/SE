@@ -57,7 +57,7 @@ export const studentAPI = {
 
 export const outpass = {
   getDailyPasskey: () => api.get("/student/passkey"),
-  getOutpasses: () => api.get("/outpasses"),
+  getOutpasses: () => api.get("/outpass/today"),
   createOutpass: (data) => api.post("/outpass/generate", data),
   updateOutpass: (id, data) => api.put(`/outpass/${id}`, data),
 }

@@ -12,7 +12,6 @@ import SACScreen from './screens/SACScreen';
 import CreateOutpassScreen from "./screens/CreateOutpassScreen"
 import Scanner from './screens/ScannerScreen';
 import LibraryScreen from './screens/LibraryScreen';
-
 const Stack = createStackNavigator();
 
 function RootNavigator() {
@@ -30,6 +29,7 @@ function RootNavigator() {
           <Stack.Screen name="SAC" component={SACScreen} />
           <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
           <Stack.Screen name="Scan" component={Scanner} />  
+          <Stack.Screen name="Library" component={LibraryScreen} /> 
         </>  
       ) : (
         <>
@@ -42,7 +42,6 @@ function RootNavigator() {
       <Stack.Screen name="SAC" component={SACScreen} />
       <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
       <Stack.Screen name="Scan" component={Scanner} />  
-      <Stack.Screen name="Library" component={LibraryScreen} />
       */}
     </Stack.Navigator>
   );

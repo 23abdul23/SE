@@ -33,7 +33,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     setLoading(true)
-    const result = await login(email, password)
+    const result = await login(email, password)    
     setLoading(false)
 
     if (!result.success) {

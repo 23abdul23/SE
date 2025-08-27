@@ -15,7 +15,7 @@ import { useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { useTheme } from "../context/ThemeContext"
 import DateTimePicker from "@react-native-community/datetimepicker"
-import { outpass, studentAPI } from "../services/api"
+import { outpass } from "../services/api"
 import {useAuth} from "../context/AuthContext"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 import LoadingSpinner from "../components/LoadingSpinner"
@@ -28,14 +28,15 @@ export default function CreateOutpassScreen({ navigation }) {
   const [formData, setFormData] = useState({
     purpose: "Going out",
     destination: "Cafe",
-    // fromDate: new Date(),
-    // fromTime: new Date(),
-    // toDate: new Date(),
-    // toTime: new Date(),
-    fromDate: new Date("2025-08-01"),          // 1st Aug 2025
-    fromTime: new Date("2025-08-01T09:30:00"), // 9:30 AM
-    toDate: new Date("2025-08-05"),            // 5th Aug 2025
-    toTime: new Date("2025-08-05T18:00:00"),
+    fromDate: new Date(),
+    fromTime: new Date(),
+    toDate: new Date(),
+    toTime: new Date(),
+    // fromDate: new Date("2025-08-01"),          // 1st Aug 2025
+    // fromTime: new Date("2025-08-01T09:30:00"), // 9:30 AM
+    // toDate: new Date("2025-08-05"),            // 5th Aug 2025
+    // toTime: new Date("2025-08-05T18:00:00"),
+    emergencyName: "Abdul",
     emergencyContact: "8909627048",
     remarks: "Nothing",
   })
@@ -71,11 +72,6 @@ export default function CreateOutpassScreen({ navigation }) {
       return false
     }
 
-    if (fromDate >= toDate) {
-      Alert.alert("Error", "Return date must be after departure date")
-      return false
-    }
-
     return true
   }
 
@@ -84,14 +80,13 @@ export default function CreateOutpassScreen({ navigation }) {
 
     setLoading(true)
     try {
-      console.log(user)
       await outpass.createOutpass(formData)
       Alert.alert("Success", "Outpass request submitted successfully", [
         { text: "OK", onPress: () => navigation.goBack() },
       ])
     } 
     catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Failed to create outpass")
+      Alert.alert("Error Screen", error.response?.data?.message || "Failed to create outpass")
     } finally {
       setLoading(false)
     }
@@ -185,6 +180,18 @@ export default function CreateOutpassScreen({ navigation }) {
                 <Text style={[styles.dateTimeText, { color: colors.text }]}>{formatTime(formData.toTime)}</Text>
               </TouchableOpacity>
             </View>
+          </View>
+
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+            <Text style={[styles.label, { color: colors.text }]}>Emergency Name *</Text>
+            <TextInput
+              style={[styles.input, { color: colors.subText }]}
+              placeholder="Person to contact in emergency"
+              placeholderTextColor={colors.subText}
+              value={formData.emergencyName}
+              onChangeText={(value) => updateFormData("emergencyName", value)}
+              keyboardType="phone-pad"
+            />
           </View>
 
           <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
