@@ -371,7 +371,6 @@ router.get("/today", [authenticate, checkOutpassExpiry], async (req, res) => {
       }
     }).populate("userId", "name studentId hostel roomNumber")
 
-    console.log(outpass)
 
     if (!outpass) {
       return res.json({ 

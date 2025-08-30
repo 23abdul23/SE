@@ -24,7 +24,8 @@ export default function ProfileScreen() {
   const loadProfile = async () => {
     try {
       const response = await studentAPI.getProfile()
-      setProfile(response.data)
+      console.log('front:',response.data)
+      setProfile(response.data.userData)
     } catch (error) {
       console.log("Profile load error:", error)
       Alert.alert("Error", "Failed to load profile")
@@ -38,9 +39,12 @@ export default function ProfileScreen() {
     try {
       await studentAPI.updateProfile(profile)
       setEditing(false)
+      loadProfile();
       Alert.alert("Success", "Profile updated successfully")
+
     } catch (error) {
-      Alert.alert("Error", "Failed to update profile")
+      Alert.alert("Error", "Error in Update profile")
+
     } finally {
       setSaving(false)
     }
@@ -53,7 +57,7 @@ export default function ProfileScreen() {
   if (loading) {
     return <LoadingSpinner />
   }
-
+  console.log(profile)
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}> 
       <View style={[styles.header, { backgroundColor: colors.card }]}> 
@@ -94,18 +98,18 @@ export default function ProfileScreen() {
                 onChangeText={(value) => updateProfile("name", value)}
               />
             ) : (
-              <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.name}</Text>
+              <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.name}</Text>
             )}
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Email</Text>
-            <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.email}</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.email}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Student ID</Text>
-            <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.studentId}</Text>
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.studentId}</Text>
           </View>
 
           <View style={styles.fieldContainer}>
@@ -118,7 +122,7 @@ export default function ProfileScreen() {
                 keyboardType="phone-pad"
               />
             ) : (
-              <Text style={[styles.fieldValue, { color: colors.text }]}>{user?.phone}</Text>
+              <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.phone}</Text>
             )}
           </View>
         </View>

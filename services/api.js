@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 
 const API_HOST = Constants.expoConfig?.extra?.API_HOST || "localhost";
 
-const API_BASE_URL = `http://10.182.142.171:3000/api`;
+const API_BASE_URL = `http://10.112.185.47:3000/api`;
 //const API_BASE_URL = `http://${API_HOST}:3000/api`;
 // Base API configuration
 
