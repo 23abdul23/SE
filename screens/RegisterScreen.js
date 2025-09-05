@@ -45,6 +45,7 @@ export default function RegisterScreen({ navigation }) {
     roomNumber: "818",
     phone: "9876543210",
     gender: "male",
+    securityPost: "",
     profilePhoto: "",
     deviceId : randomDeviceId
   })
