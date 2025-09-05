@@ -37,7 +37,7 @@ export default function RegisterScreen({ navigation }) {
     email: "23abdul23@gmail.com",
     password: "123456",
     confirmPassword: "123456",
-    studentId: "iit2024243",
+    Id: "iit2024243",
     department: "IT",
     role: "student",
     year: "2nd Year",
@@ -67,9 +67,9 @@ export default function RegisterScreen({ navigation }) {
   }
 
   const validateForm = () => {
-    const { name, email, password, confirmPassword, studentId, department, year, hostel, phone, gender, deviceId } = formData
+    const { name, email, password, confirmPassword, Id, department, year, hostel, phone, gender, deviceId } = formData
 
-    if (!name || !email || !password || !studentId || !department || !year || !hostel || !phone || !gender) {
+    if (!name || !email || !password || !Id || !department || !year || !hostel || !phone || !gender) {
       Alert.alert("Error", "Please fill in all required fields")
       return false
     }
