@@ -2,6 +2,8 @@ const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
+const WardenUser = require("../models/WardenUser")
+const GuardUser = require("../models/GuardUser")
 const { authenticate } = require("../middleware/auth");
 const router = express.Router()
 
@@ -9,11 +11,16 @@ const router = express.Router()
 router.post("/register", async (req, res) => {
   try {
     console.log(req.body)
-  const { name, email, password, studentId, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto } = req.body
+    const { name, email, password, Id, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto , role} = req.body
 
-    // Check if user already exists
+    
+
+    let user;
+
+    if(role == "student") {
+       // Check if user already exists
     const existingUser = await User.findOne({
-      $or: [{ email }, { studentId }],
+      $or: [{ email }, { Id }],
     })
 
     if (existingUser) {
@@ -21,13 +28,12 @@ router.post("/register", async (req, res) => {
         message: "User with this email or student ID already exists",
       })
     }
-
-    // Create new user
-    const user = new User({
+       // Create new user
+      user = new User({
       name,
       email,
       password: password,
-      studentId,
+      studentId: Id,
       hostel,
       roomNumber,
       phoneNumber,
@@ -36,6 +42,55 @@ router.post("/register", async (req, res) => {
       gender,
       profilePhoto
     })
+
+    }
+    else if(role == "warden") {
+       // Check if user already exists
+    const existingUser = await WardenUser.findOne({
+      $or: [{ email }, { Id }],
+    })
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "warden with this email or  ID already exists",
+      })
+    }
+       // Create new user
+      user = new WardenUser({
+      name,
+      email,
+      password: password,
+      hostel,
+      phoneNumber,
+      deviceId,
+      gender,
+      profilePhoto
+    })
+    }
+    else {
+       // Create new user
+        // Check if user already exists
+    const existingUser = await GuardUser.findOne({
+      $or: [{ Id }],
+    })
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "Guard with this ID already exists",
+      })
+    }
+
+      user = new GuardUser({
+      name,
+      guardId: Id,
+      phoneNumber,
+      emergencyContact,
+      deviceId,
+      gender,
+      profilePhoto
+    })
+    }
+   
 
     await user.save()
 

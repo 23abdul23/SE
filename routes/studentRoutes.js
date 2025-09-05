@@ -2,22 +2,19 @@ const express = require("express")
 const User = require("../models/User")
 const { authenticate } = require("../middleware/auth");
 const adminAuth = require("../middleware/adminAuth");
-const { da } = require("date-fns/locale/da");
 
 const router = express.Router()
 
 router.get('/profile', authenticate, async (req, res) =>{
     try {
         const user = await User.findOne({studentId : req.user.studentId})
-        
+
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
         return res.status(200).json({message: "User Found!", userData : user})
 
-        
-        
     } 
     catch (error) {
         console.log("Error: ", error)

@@ -19,6 +19,9 @@ import { useTheme } from "../context/ThemeContext"
 import { Picker } from "@react-native-picker/picker"
 import { useAuth } from "../context/AuthContext"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
+import StudentRegisterCard from "../components/StudentRegisterCard";
+import WardenRegisterCard from "../components/WardenRegisterCard";
+import SecurityRegisterCard from "../components/SecurityRegisterCard";
 import LoadingSpinner from "../components/LoadingSpinner"
 
 import * as Device from "expo-device";
@@ -34,13 +37,15 @@ export default function RegisterScreen({ navigation }) {
     email: "23abdul23@gmail.com",
     password: "123456",
     confirmPassword: "123456",
-    studentId: "iit2024243",
+    Id: "iit2024243",
     department: "IT",
+    role: "student",
     year: "2nd Year",
     hostel: "Hostel A",
     roomNumber: "818",
     phone: "9876543210",
     gender: "male",
+    securityPost: "",
     profilePhoto: "",
     deviceId : randomDeviceId
   })
@@ -53,6 +58,8 @@ export default function RegisterScreen({ navigation }) {
 
   const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
 
+  const roles = ["student", "warden", "security"]
+
   const hostels = ["Hostel A", "Hostel B", "Hostel C", "Hostel D"]
 
   const updateFormData = (key, value) => {
@@ -60,9 +67,9 @@ export default function RegisterScreen({ navigation }) {
   }
 
   const validateForm = () => {
-    const { name, email, password, confirmPassword, studentId, department, year, hostel, phone, gender, deviceId } = formData
+    const { name, email, password, confirmPassword, Id, department, year, hostel, phone, gender, deviceId } = formData
 
-    if (!name || !email || !password || !studentId || !department || !year || !hostel || !phone || !gender) {
+    if (!name || !email || !password || !Id || !department || !year || !hostel || !phone || !gender) {
       Alert.alert("Error", "Please fill in all required fields")
       return false
     }
@@ -128,7 +135,6 @@ export default function RegisterScreen({ navigation }) {
           <Text style={[styles.title, { color: colors.text }]}>Create Account</Text>
           <Text style={[styles.subtitle, { color: colors.text }]}>Join Aegis ID Campus Pass</Text>
         </View>
-
         <View style={styles.form}>
           <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="person-outline" size={20} color={colors.text} style={styles.inputIcon} />
@@ -141,85 +147,45 @@ export default function RegisterScreen({ navigation }) {
               autoCapitalize="words"
             />
           </View>
-
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
-            <Ionicons name="mail-outline" size={20} color={colors.text} style={styles.inputIcon} />
-            <TextInput
-              style={[styles.input, { color: colors.text }]}
-              placeholder="Email Address *"
-              placeholderTextColor={colors.text}
-              value={formData.email}
-              onChangeText={(value) => updateFormData("email", value)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
-
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
-            <Ionicons name="school-outline" size={20} color={colors.text} style={styles.inputIcon} />
-            <TextInput
-              style={[styles.input, { color: colors.text }]}
-              placeholder="Student ID *"
-              placeholderTextColor={colors.text}
-              value={formData.studentId}
-              onChangeText={(value) => updateFormData("studentId", value)}
-              autoCapitalize="characters"
-            />
-          </View>
-
           <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="library-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <Picker
-              selectedValue={formData.department}
+              selectedValue={formData.role}
               style={styles.picker}
-              onValueChange={(value) => updateFormData("department", value)}
+              onValueChange={(value) => updateFormData("role", value)}
             >
-              <Picker.Item label="Select Department *" value="" />
-              {departments.map((dept) => (
+              <Picker.Item label="Select Role *" value="" />
+              {roles.map((dept) => (
                 <Picker.Item key={dept} label={dept} value={dept} />
               ))}
             </Picker>
           </View>
-
-          <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
-            <Ionicons name="calendar-outline" size={20} color={colors.text} style={styles.inputIcon} />
-            <Picker
-              selectedValue={formData.year}
-              style={styles.picker}
-              onValueChange={(value) => updateFormData("year", value)}
-            >
-              <Picker.Item label="Select Year *" value="" />
-              {years.map((year) => (
-                <Picker.Item key={year} label={year} value={year} />
-              ))}
-            </Picker>
-          </View>
-
-          <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
-            <Ionicons name="home-outline" size={20} color={colors.text} style={styles.inputIcon} />
-            <Picker
-              selectedValue={formData.hostel}
-              style={styles.picker}
-              onValueChange={(value) => updateFormData("hostel", value)}
-            >
-              <Picker.Item label="Select Hostel *" value="" />
-              {hostels.map((hostel) => (
-                <Picker.Item key={hostel} label={hostel} value={hostel} />
-              ))}
-            </Picker>
-          </View>
-
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
-            <Ionicons name="bed-outline" size={20} color={colors.text} style={styles.inputIcon} />
-            <TextInput
-              style={[styles.input, { color: colors.text }]}
-              placeholder="Room Number"
-              placeholderTextColor={colors.text}
-              value={formData.roomNumber}
-              onChangeText={(value) => updateFormData("roomNumber", value)}
+          {formData.role === 'student' && (
+            <StudentRegisterCard
+              formData={formData}
+              updateFormData={updateFormData}
+              departments={departments}
+              years={years}
+              hostels={hostels}
+              colors={colors}
             />
-          </View>
-
+          )}
+          {formData.role === 'warden' && (
+            <WardenRegisterCard
+              formData={formData}
+              updateFormData={updateFormData}
+              hostels={hostels}
+              colors={colors}
+            />
+          )}
+          {formData.role === 'security' && (
+            <SecurityRegisterCard
+              formData={formData}
+              updateFormData={updateFormData}
+              colors={colors}
+            />
+          )}
+          {/* Common fields for all roles */}
           <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="call-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
@@ -231,7 +197,6 @@ export default function RegisterScreen({ navigation }) {
               keyboardType="phone-pad"
             />
           </View>
-
           <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="male-female-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <Picker
@@ -245,7 +210,6 @@ export default function RegisterScreen({ navigation }) {
               <Picker.Item label="Other" value="other" />
             </Picker>
           </View>
-
           <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="image-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
@@ -256,7 +220,6 @@ export default function RegisterScreen({ navigation }) {
               onChangeText={(value) => updateFormData("profilePhoto", value)}
             />
           </View>
-
           <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="lock-closed-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
@@ -271,7 +234,6 @@ export default function RegisterScreen({ navigation }) {
               <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
-
           <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
             <Ionicons name="lock-closed-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
@@ -290,12 +252,10 @@ export default function RegisterScreen({ navigation }) {
               />
             </TouchableOpacity>
           </View>
-
           <TouchableOpacity style={[styles.registerButton, { backgroundColor: isDarkMode ? '#2196f3' : '#2196f3' }]} onPress={handleRegister}>
             <Text style={[styles.registerButtonText, { color: colors.text }]}>Create Account</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: colors.text }]}>Already have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}> 
@@ -304,7 +264,7 @@ export default function RegisterScreen({ navigation }) {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
