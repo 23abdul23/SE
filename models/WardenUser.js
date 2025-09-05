@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["student", "warden", "security"],
-      default: "student",
+      default: "warden",
     },
     gender: {
       type: String,
@@ -33,15 +33,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    roomNumber: {
-      type: String,
-      trim: true,
-    },
     phoneNumber: {
-      type: String,
-      trim: true,
-    },
-    emergencyContact: {
       type: String,
       trim: true,
     },
@@ -52,11 +44,6 @@ const userSchema = new mongoose.Schema(
     deviceId: {
       type: String,
       required: true,
-      unique: true,
-    },
-    studentId: {
-      type: String,
-      sparse: true,
       unique: true,
     },
     isActive: {
@@ -94,4 +81,4 @@ userSchema.methods.toJSON = function () {
   return user
 }
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("WardenUser", userSchema)
