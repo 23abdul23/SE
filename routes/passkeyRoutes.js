@@ -15,6 +15,12 @@ router.get("/today", authenticate, async (req, res) => {
     const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 1)
 
+    // Delete all previous passkeys for this user except today's
+    await Passkey.deleteMany({
+      userId: req.user._id,
+      createdAt: { $lt: today }
+    })
+    
     let passkey = await Passkey.findOne({
       userId: req.user._id,
       createdAt: { $gte: today, $lt: tomorrow },
