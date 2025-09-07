@@ -3,7 +3,7 @@ const Passkey = require("../models/Passkey")
 const User = require("../models/User")
 const Log = require("../models/Log")
 const { authenticate } = require("../middleware/auth");
-const { generateDailyHash } = require("../utils/hashGenerator")
+const { generatePasskeyHash } = require("../utils/hashGenerator")
 const router = express.Router()
 
 // Get today's passkey for authenticate user
@@ -16,18 +16,19 @@ router.get("/today", authenticate, async (req, res) => {
     tomorrow.setDate(tomorrow.getDate() + 1)
 
     let passkey = await Passkey.findOne({
-      userId: req.user.userId,
+      userId: req.user._id,
       createdAt: { $gte: today, $lt: tomorrow },
     })
 
     if (!passkey) {
       // Generate new passkey for today
-      const user = await User.findById(req.user.userId)
-      const hash = generateDailyHash(user.studentId, today)
+      const user = await User.findOne({studentId : req.user.studentId})
+      const hash = generatePasskeyHash(user.studentId, user.deviceId, today)
 
       passkey = new Passkey({
-        userId: req.user.userId,
+        userId: req.user._id,
         hash,
+        date : new Date(),
         expiresAt: tomorrow,
       })
 
@@ -43,9 +44,16 @@ router.get("/today", authenticate, async (req, res) => {
         isActive: passkey.isActive,
       },
     })
+
   } catch (error) {
-    console.error("Passkey fetch error:", error)
-    res.status(500).json({ message: "Server error fetching passkey" })
+
+    if (error.code === 11000) {
+    console.error("Duplicate hash detected:", error.keyValue.hash);
+    // Decide: skip, regenerate new hash, or update existing passkey
+    } else {
+      console.error("Passkey fetch error:", error)
+      res.status(500).json({ message: "Server error fetching passkey" })
+    }
   }
 })
 

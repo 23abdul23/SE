@@ -24,7 +24,6 @@ router.get('/profile', authenticate, async (req, res) =>{
 
 router.put('/profile', authenticate, async(req, res) => {
 
-    console.log(req.body)
     const user = await User.findOne({ studentId: req.user.studentId });
 
     if (!user) {

@@ -1,1 +1,0 @@
-For this project write a readme filet o for  my teammates to fork this repo , then install hte dependencies , download adndrriod studio use developer iptions and connect using usb  and using android option inn the expoo start

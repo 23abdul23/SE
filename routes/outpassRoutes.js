@@ -361,7 +361,6 @@ router.get("/today", [authenticate, checkOutpassExpiry], async (req, res) => {
     const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 1)
 
-    console.log(req.user)
 
     const outpass = await Outpass.findOne({
       userId: req.user._id,

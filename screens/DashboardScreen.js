@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { useTheme } from "../context/ThemeContext"
 import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
-import { studentAPI } from "../services/api"
+import { outpass, studentAPI } from "../services/api"
 import styles from "../styles/DashboardStyles"
 
 import LoadingSpinner from "../components/LoadingSpinner"
@@ -31,17 +31,19 @@ export default function DashboardScreen({ navigation }) {
     try {
       const [passkeyResponse, outpassesResponse] = await Promise.all([
         studentAPI.getDailyPasskey(),
-        studentAPI.getOutpasses(),
+        outpass.getOutpasses(),
       ])
 
       setPasskey(passkeyResponse.data)
 
-      const outpasses = outpassesResponse.data
-      setStats({
-        totalOutpasses: outpasses.length,
-        activeOutpasses: outpasses.filter((op) => op.status === "active").length,
-        pendingOutpasses: outpasses.filter((op) => op.status === "pending").length,
-      })
+      if (outpassesResponse.data.outpass){
+        const outpasses = outpassesResponse.data.outpass.auditTrail
+        setStats({
+          totalOutpasses: outpasses.length,
+          activeOutpasses: outpasses.filter((op) => op.status === "approved").length,
+          pendingOutpasses: outpasses.filter((op) => op.status === "pending").length,
+        })
+      }
     } catch (error) {
       console.log("Dashboard load error:", error)
       Alert.alert("Error", "Failed to load dashboard data")
@@ -98,7 +100,7 @@ export default function DashboardScreen({ navigation }) {
 
       <View style={styles.content}>
         {/* Daily Passkey Card */}
-        <PasskeyCard passkey={passkey} onRefresh={loadDashboardData} />
+        <PasskeyCard passkey={passkey.passkey} onRefresh={loadDashboardData} />
 
         {/* Quick Actions */}
         <View style={styles.quickActions}>

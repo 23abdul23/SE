@@ -10,11 +10,7 @@ const router = express.Router()
 // Register new user
 router.post("/register", async (req, res) => {
   try {
-    console.log(req.body)
     const { name, email, password, Id, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto , role} = req.body
-
-    
-
     let user;
 
     if(role == "student") {

@@ -42,7 +42,6 @@ export default function OutpassScreen() {
   const loadOutpasses = async () => {
     try {
       const response = await outpass.getOutpasses()
-      console.log("Outpasses API Response:", response.data)
 
       // ✅ Handle "today" route returning a single object
       if (response.data.outpass) {
@@ -137,9 +136,6 @@ export default function OutpassScreen() {
         ListEmptyComponent={renderEmptyState}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity style={styles.createButton} onPress={handleCreateOutpass}>
-        <Text style={styles.createButtonText}>Create Outpass</Text>
-      </TouchableOpacity>
     </View>
   )
 }
