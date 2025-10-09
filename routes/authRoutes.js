@@ -10,6 +10,7 @@ const router = express.Router()
 // Register new user
 router.post("/register", async (req, res) => {
   try {
+
     const { name, email, password, Id, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto , role} = req.body
     let user;
 
@@ -67,7 +68,7 @@ router.post("/register", async (req, res) => {
        // Create new user
         // Check if user already exists
     const existingUser = await GuardUser.findOne({
-      $or: [{ Id }],
+      $or: [{ email }],
     })
 
     if (existingUser) {
@@ -78,6 +79,7 @@ router.post("/register", async (req, res) => {
 
       user = new GuardUser({
       name,
+      email,
       guardId: Id,
       phoneNumber,
       emergencyContact,
@@ -117,13 +119,31 @@ router.post("/register", async (req, res) => {
 // Login user
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body
 
+    console.log(req.body)
+    const { email, password ,role} = req.body
+
+    let user;
     // Find user by email
-    const user = await User.findOne({ email })
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials Username" })
+
+    if (role == 'student'){
+      user = await User.findOne({ email })
     }
+    else if (role == 'warden'){
+      
+      user = await WardenUser.findOne({ email })
+    }
+    else if (role == 'security'){
+
+      user = await GuardUser.findOne({ email })
+      if (!user) {
+        return res.status(400).json({ message: "Invalid credentials Username for Guard" })
+      }
+    }
+
+    console.log(user)
+    
+    
 
 
     // Update last login

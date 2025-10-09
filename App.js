@@ -12,6 +12,8 @@ import SACScreen from './screens/SACScreen';
 import CreateOutpassScreen from "./screens/CreateOutpassScreen"
 import Scanner from './screens/ScannerScreen';
 import LibraryScreen from './screens/LibraryScreen';
+import { StackScreen } from 'react-native-screens';
+import GuardDashboardScreen from './screens/GuardScreen';
 const Stack = createStackNavigator();
 
 function RootNavigator() {
@@ -20,17 +22,25 @@ function RootNavigator() {
   if (loading) {
     return <LoadingScreen />;
   }
-  
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
+        user.role == 'student' ? (
         <>
           <Stack.Screen name="Main" component={MainTabNavigator} />
           <Stack.Screen name="SAC" component={SACScreen} />
           <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
           <Stack.Screen name="Scan" component={Scanner} />  
           <Stack.Screen name="Library" component={LibraryScreen} /> 
-        </>  
+        </>
+        ):
+        (<>
+          <Stack.Screen name="GuardMain" component={GuardDashboardScreen} />
+          <Stack.Screen name="SAC" component={SACScreen} />
+          <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
+          <Stack.Screen name="Scan" component={Scanner} />  
+          <Stack.Screen name="Library" component={LibraryScreen} /> 
+        </>)  
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
@@ -38,11 +48,6 @@ function RootNavigator() {
         </>
       )}
 
-      {/* <Stack.Screen name="Main" component={MainTabNavigator} />
-      <Stack.Screen name="SAC" component={SACScreen} />
-      <Stack.Screen name="CreateOutpass" component={CreateOutpassScreen} />
-      <Stack.Screen name="Scan" component={Scanner} />  
-      */}
     </Stack.Navigator>
   );
 }

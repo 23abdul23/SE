@@ -38,6 +38,7 @@ export default function RegisterScreen({ navigation }) {
     password: "123456",
     confirmPassword: "123456",
     Id: "iit2024243",
+    guardId: "guard101",
     department: "IT",
     role: "student",
     year: "2nd Year",
@@ -103,6 +104,7 @@ export default function RegisterScreen({ navigation }) {
       phoneNumber: formData.phone,
     }
     delete payload.phone
+
     const result = await register(payload)
     setLoading(false)
 

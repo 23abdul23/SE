@@ -13,6 +13,7 @@ import {
 } from "react-native"
 import { useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
+import { Picker } from "@react-native-picker/picker"
 import { useTheme } from "../context/ThemeContext"
 import { useAuth } from "../context/AuthContext"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
@@ -21,6 +22,7 @@ import LoadingSpinner from "../components/LoadingSpinner"
 export default function LoginScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const [email, setEmail] = useState("")
+  const [role, setRole] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -33,7 +35,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     setLoading(true)
-    const result = await login(email, password)    
+    const result = await login(email, password, role)    
     setLoading(false)
 
     if (!result.success) {
@@ -56,6 +58,22 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.header}>
           <Text style={[styles.title, { color: colors.text }]}>Aegis ID</Text>
           <Text style={[styles.subtitle, { color: colors.text }]}>Digital Campus Pass</Text>
+        </View>
+
+
+
+        <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+          <Ionicons name="person-outline" size={20} color={colors.text} style={styles.inputIcon} />
+          <Picker
+            selectedValue={role}
+            style={[styles.input, { color: colors.text, flex: 1 }]}
+            onValueChange={(itemValue) => setRole(itemValue)}
+            dropdownIconColor={colors.text}
+          >
+            <Picker.Item label="Student" value="student" />
+            <Picker.Item label="Warden" value="warden" />
+            <Picker.Item label="Security" value="security" />
+          </Picker>
         </View>
 
         <View style={styles.form}>

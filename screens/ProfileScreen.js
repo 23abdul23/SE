@@ -24,7 +24,6 @@ export default function ProfileScreen() {
   const loadProfile = async () => {
     try {
       const response = await studentAPI.getProfile()
-      console.log('front:',response.data)
       setProfile(response.data.userData)
     } catch (error) {
       console.log("Profile load error:", error)

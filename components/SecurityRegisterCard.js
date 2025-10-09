@@ -7,6 +7,29 @@ export default function SecurityRegisterCard({ formData, updateFormData, colors 
   return (
     <>
       <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+        <Ionicons name="mail-outline" size={20} color={colors.text} style={styles.inputIcon} />
+        <TextInput
+          style={[styles.input, { color: colors.text }]}
+          placeholder="Email Address *"
+          placeholderTextColor={colors.text}
+          value={formData.email}
+          onChangeText={value => updateFormData('email', value)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+      <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+        <Ionicons name="school-outline" size={20} color={colors.text} style={styles.inputIcon} />
+        <TextInput
+          style={[styles.input, { color: colors.text }]}
+          placeholder="Guard ID*"
+          placeholderTextColor={colors.text}
+          value={formData.guardId}
+          onChangeText={value => updateFormData('guardId', value)}
+          autoCapitalize="characters"
+        />
+      </View>
+      <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
         <Ionicons name="shield-outline" size={20} color={colors.text} style={styles.inputIcon} />
         <TextInput
           style={[styles.input, { color: colors.text }]}
