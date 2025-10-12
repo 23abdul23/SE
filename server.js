@@ -1,21 +1,23 @@
-const express = require("express")
-const cors = require("cors")
-const helmet = require("helmet")
-const rateLimit = require("express-rate-limit")
-const cron = require("node-cron")
-require("dotenv").config()
+import express from "express"
+import cors from "cors"
+import helmet from "helmet"
+import rateLimit from "express-rate-limit"
+import cron from "node-cron"
+import dotenv from "dotenv"
+dotenv.config()
 
-const connectDB = require("./config/db")
-const { generateDailyPasskeys } = require("./utils/hashGenerator")
+import connectDB from "./config/db.js"
+import { generateDailyPasskeys } from "./utils/hashGenerator.js"
+
 
 // Import routes
-const authRoutes = require("./routes/authRoutes")
-const passkeyRoutes = require("./routes/passkeyRoutes")
-const outpassRoutes = require("./routes/outpassRoutes")
-const emergencyRoutes = require("./routes/emergencyRoutes")
-const adminRoutes = require("./routes/adminRoutes")
-const securityRoutes = require("./routes/securityRoutes")
-const studentRoutes = require("./routes/studentRoutes")
+import authRoutes from "./routes/authRoutes.js"
+import passkeyRoutes from "./routes/passkeyRoutes.js"
+import outpassRoutes from "./routes/outpassRoutes.js"
+import emergencyRoutes from "./routes/emergencyRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js"
+import securityRoutes from "./routes/securityRoutes.js"
+import studentRoutes from "./routes/studentRoutes.js"
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -120,4 +122,4 @@ app.listen(PORT, () => {
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`)
 })
 
-module.exports = app
+export default app

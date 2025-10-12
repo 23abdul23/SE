@@ -1,5 +1,4 @@
-const mongoose = require("mongoose")
-
+import mongoose from "mongoose";
 const outpassSchema = new mongoose.Schema(
   {
     userId: {
@@ -63,4 +62,4 @@ const outpassSchema = new mongoose.Schema(
 outpassSchema.index({ userId: 1, status: 1 })
 outpassSchema.index({ outDate: 1 })
 
-module.exports = mongoose.model("Outpass", outpassSchema)
+export default mongoose.model("Outpass", outpassSchema)

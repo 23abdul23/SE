@@ -1,13 +1,10 @@
-const express = require("express")
-const User = require("../models/User")
-const Passkey = require("../models/Passkey")
-const Outpass = require("../models/Outpass")
-const Emergency = require("../models/Emergency")
-const Log = require("../models/Log")
-const GuardUser = require("../models/GuardUser")
-const WardenUser = require("../models/WardenUser")
-const {authenticate} = require("../middleware/auth")
-const adminAuth = require("../middleware/adminAuth")
+import express from "express";
+import User from "../models/User.js";
+import Log from "../models/Log.js";
+import Outpass from "../models/Outpass.js";
+import Emergency from "../models/Emergency.js";
+import { authenticate } from "../middleware/auth.js";
+import { adminAuth } from "../middleware/adminAuth.js";
 const router = express.Router()
 
 // Get dashboard statistics
@@ -221,4 +218,4 @@ router.put("/students/:id/status", [authenticate, adminAuth], async (req, res) =
   }
 })
 
-module.exports = router
+export default router

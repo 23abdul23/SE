@@ -1,6 +1,6 @@
-const crypto = require("crypto")
-const User = require("../models/User")
-const Passkey = require("../models/Passkey")
+import crypto from "crypto"
+import User from "../models/User.js"
+import Passkey from "../models/Passkey.js"
 
 const generatePasskeyHash = (userId, deviceId, date) => {
   const dateString = date.toISOString().split("T")[0] // YYYY-MM-DD format
@@ -72,9 +72,4 @@ const validatePasskey = async (hash, userId) => {
     return false
   }
 }
-
-module.exports = {
-  generatePasskeyHash,
-  generateDailyPasskeys,
-  validatePasskey,
-}
+export { generatePasskeyHash, generateDailyPasskeys, validatePasskey }

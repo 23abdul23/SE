@@ -1,101 +1,41 @@
-const express = require("express")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const User = require("../models/User")
-const WardenUser = require("../models/WardenUser")
-const GuardUser = require("../models/GuardUser")
-const { authenticate } = require("../middleware/auth");
-const router = express.Router()
+import express from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import { authenticate } from "../middleware/auth.js";
 
-// Register new user
+const router = express.Router();
+
+// Register
 router.post("/register", async (req, res) => {
   try {
-
-    const { name, email, password, Id, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto , role} = req.body
-    let user;
-
-    if(role == "student") {
-       // Check if user already exists
-    const existingUser = await User.findOne({
-      $or: [{ email }, { Id }],
-    })
-
+    const { name, email, password, studentId, role } = req.body;
+    
+    const existingUser = await User.findOne({ 
+      $or: [{ email }, { studentId }] 
+    });
+    
     if (existingUser) {
-      return res.status(400).json({
-        message: "User with this email or student ID already exists",
-      })
+      return res.status(400).json({ message: "User already exists" });
     }
-       // Create new user
-      user = new User({
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    
+    const user = new User({
       name,
       email,
-      password: password,
-      studentId: Id,
-      hostel,
-      roomNumber,
-      phoneNumber,
-      emergencyContact,
-      deviceId,
-      gender,
-      profilePhoto
-    })
+      passwordHash,
+      studentId,
+      role: role || 'student'
+    });
 
-    }
-    else if(role == "warden") {
-       // Check if user already exists
-    const existingUser = await WardenUser.findOne({
-      $or: [{ email }, { Id }],
-    })
+    await user.save();
 
-    if (existingUser) {
-      return res.status(400).json({
-        message: "warden with this email or  ID already exists",
-      })
-    }
-       // Create new user
-      user = new WardenUser({
-      name,
-      email,
-      password: password,
-      hostel,
-      phoneNumber,
-      deviceId,
-      gender,
-      profilePhoto
-    })
-    }
-    else {
-       // Create new user
-        // Check if user already exists
-    const existingUser = await GuardUser.findOne({
-      $or: [{ email }],
-    })
-
-    if (existingUser) {
-      return res.status(400).json({
-        message: "Guard with this ID already exists",
-      })
-    }
-
-      user = new GuardUser({
-      name,
-      email,
-      guardId: Id,
-      phoneNumber,
-      emergencyContact,
-      deviceId,
-      gender,
-      profilePhoto
-    })
-    }
-   
-
-    await user.save()
-
-    // Generate JWT token
-    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE,
-    })
+    const token = jwt.sign(
+      { id: user._id, studentId: user.studentId },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE || '7d' }
+    );
 
     res.status(201).json({
       message: "User registered successfully",
@@ -105,55 +45,39 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         studentId: user.studentId,
-        role: user.role,
-      },
-    })
+        role: user.role
+      }
+    });
   } catch (error) {
-    console.error("Registration error:", error)
-    res.status(500).json({ message: "Server error during registration" })
+    console.error("Registration error:", error);
+    res.status(500).json({ message: "Server error during registration" });
   }
-})
+});
 
-
-
-// Login user
+// Login
 router.post("/login", async (req, res) => {
   try {
+    const { email, password, role } = req.body;
 
-    console.log(req.body)
-    const { email, password ,role} = req.body
-
-    let user;
-    // Find user by email
-
-    if (role == 'student'){
-      user = await User.findOne({ email })
-    }
-    else if (role == 'warden'){
-      
-      user = await WardenUser.findOne({ email })
-    }
-    else if (role == 'security'){
-
-      user = await GuardUser.findOne({ email })
-      if (!user) {
-        return res.status(400).json({ message: "Invalid credentials Username for Guard" })
-      }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    console.log(user)
-    
-    
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
+    if (role && user.role !== role) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
 
-    // Update last login
-    user.lastLogin = new Date()
-    await user.save()
-
-    // Generate JWT token
-    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE,
-    })
+    const token = jwt.sign(
+      { id: user._id, studentId: user.studentId },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE || '7d' }
+    );
 
     res.json({
       message: "Login successful",
@@ -163,44 +87,13 @@ router.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         studentId: user.studentId,
-        role: user.role,
-        hostel: user.hostel,
-        roomNumber: user.roomNumber,
-      },
-    })
+        role: user.role
+      }
+    });
   } catch (error) {
-    console.error("Login error:", error)
-    res.status(500).json({ message: "Server error during login" })
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error during login" });
   }
-})
+});
 
-// Get current user profile
-router.get("/profile", authenticate, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId).select("-password")
-    res.json({ user })
-  } catch (error) {
-    console.error("Profile fetch error:", error)
-    res.status(500).json({ message: "Server error fetching profile" })
-  }
-})
-
-// Update user profile
-router.put("/profile", authenticate, async (req, res) => {
-  try {
-    const { name, phoneNumber, emergencyContact, hostel, roomNumber, gender, profilePhoto } = req.body
-
-    const user = await User.findByIdAndUpdate(
-      req.user.userId,
-      { name, phoneNumber, emergencyContact, hostel, roomNumber, gender, profilePhoto },
-      { new: true },
-    ).select("-password")
-
-    res.json({ message: "Profile updated successfully", user })
-  } catch (error) {
-    console.error("Profile update error:", error)
-    res.status(500).json({ message: "Server error updating profile" })
-  }
-})
-
-module.exports = router
+export default router;

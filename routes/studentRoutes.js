@@ -1,43 +1,69 @@
-const express = require("express")
-const User = require("../models/User")
-const { authenticate } = require("../middleware/auth");
-const adminAuth = require("../middleware/adminAuth");
+import express from "express";
+import User from "../models/User.js";
+import Passkey from "../models/Passkey.js";
+import Outpass from "../models/Outpass.js";
+import { authenticate } from "../middleware/auth.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/profile', authenticate, async (req, res) =>{
-    try {
-        const user = await User.findOne({studentId : req.user.studentId})
+// Get student profile
+router.get("/profile", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-passwordHash');
+    res.json({ user });
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+    res.status(500).json({ message: "Server error fetching profile" });
+  }
+});
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+// Update student profile
+router.put("/profile", authenticate, async (req, res) => {
+  try {
+    const updates = req.body;
+    delete updates.passwordHash; // Don't allow password updates here
+    
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      updates,
+      { new: true }
+    ).select('-passwordHash');
+    
+    res.json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    console.error("Profile update error:", error);
+    res.status(500).json({ message: "Server error updating profile" });
+  }
+});
 
-        return res.status(200).json({message: "User Found!", userData : user})
+// Get student dashboard stats
+router.get("/dashboard", authenticate, async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    } 
-    catch (error) {
-        console.log("Error: ", error)
-        res.status(500)
-    }
-}) 
+    const totalOutpasses = await Outpass.countDocuments({ studentId: req.user._id });
+    const activeOutpasses = await Outpass.countDocuments({ 
+      studentId: req.user._id, 
+      status: 'approved',
+      date: { $gte: today }
+    });
+    const pendingOutpasses = await Outpass.countDocuments({ 
+      studentId: req.user._id, 
+      status: 'pending' 
+    });
 
-router.put('/profile', authenticate, async(req, res) => {
+    res.json({
+      stats: {
+        totalOutpasses,
+        activeOutpasses,
+        pendingOutpasses
+      }
+    });
+  } catch (error) {
+    console.error("Dashboard stats error:", error);
+    res.status(500).json({ message: "Server error fetching dashboard stats" });
+  }
+});
 
-    const user = await User.findOne({ studentId: req.user.studentId });
-
-    if (!user) {
-    return res.status(404).json({ message: "User not found" });
-    }
-
-    user.name = req.body.name;
-    user.phoneNumber = req.body.phone;
-    user.roomNumber = req.body.roomNumber;
-
-    await user.save();
-
-    return res.status(200).json({message : "User Data is Updated"})
-
-})
-
-module.exports = router
+export default router;

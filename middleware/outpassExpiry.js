@@ -1,4 +1,4 @@
-const Outpass = require("../models/Outpass");
+import Outpass from "../models/Outpass.js";
 
 // Middleware to automatically check and expire old outpasses
 const checkOutpassExpiry = async (req, res, next) => {
@@ -47,4 +47,4 @@ const checkOutpassExpiry = async (req, res, next) => {
   }
 };
 
-module.exports = { checkOutpassExpiry };
+export default checkOutpassExpiry;

@@ -1,5 +1,6 @@
-const { verifyToken } = require("../config/jwt")
-const User = require("../models/User")
+
+import { verifyToken } from "../config/jwt.js"
+import User from "../models/User.js"
 
 const authenticate = async (req, res, next) => {
   try {
@@ -38,7 +39,4 @@ const authorize = (...roles) => {
   }
 }
 
-module.exports = {
-  authenticate,
-  authorize,
-}
+export { authenticate, authorize }
