@@ -35,7 +35,6 @@ export default function LoginScreen({ navigation }) {
     }
 
     setLoading(true)
-    console.log(email, password, role)
     const result = await login(email, password, role)    
     setLoading(false)
 

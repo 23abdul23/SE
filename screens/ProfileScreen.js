@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { useTheme } from "../context/ThemeContext"
 import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
-import { studentAPI } from "../services/api"
+import { commonAPI } from "../services/api"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 import LoadingSpinner from "../components/LoadingSpinner"
 
@@ -23,7 +23,7 @@ export default function ProfileScreen() {
 
   const loadProfile = async () => {
     try {
-      const response = await studentAPI.getProfile()
+      const response = await commonAPI.getProfile()
       console.log('front:',response.data)
       setProfile(response.data.userData)
     } catch (error) {
@@ -37,7 +37,7 @@ export default function ProfileScreen() {
   const handleSave = async () => {
     setSaving(true)
     try {
-      await studentAPI.updateProfile(profile)
+      await commonAPI.updateProfile(profile)
       setEditing(false)
       loadProfile();
       Alert.alert("Success", "Profile updated successfully")

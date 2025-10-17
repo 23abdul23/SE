@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { useTheme } from "../context/ThemeContext"
 import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
-import { outpass, studentAPI } from "../services/api"
+import { outpass, commonAPI } from "../services/api"
 import styles from "../styles/DashboardStyles"
 
 import LoadingSpinner from "../components/LoadingSpinner"
@@ -30,7 +30,7 @@ export default function DashboardScreen({ navigation }) {
   const loadDashboardData = async () => {
     try {
       const [passkeyResponse, outpassesResponse] = await Promise.all([
-        studentAPI.getDailyPasskey(),
+        commonAPI.getDailyPasskey(),
         outpass.getOutpasses(),
       ])
 

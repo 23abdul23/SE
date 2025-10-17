@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       enum: ["student", "warden", "security"],
       default: "security",
     },
+    location : {
+      type: String,
+      require : true
+    },
     gender: {
       type: String,
       enum: ["male", "female", "other"],      

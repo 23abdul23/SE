@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { useTheme } from "../context/ThemeContext"
 import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
-import { outpass, studentAPI } from "../services/api"
+import { commonAPI } from "../services/api"
 import styles from "../styles/DashboardStyles"
 
 import LoadingSpinner from "../components/LoadingSpinner"
@@ -30,21 +30,13 @@ export default function GuardDashboardScreen({ navigation }) {
 
   const loadDashboardData = async () => {
     try {
-      const [passkeyResponse, outpassesResponse] = await Promise.all([
-        studentAPI.getDailyPasskey(),
-        outpass.getOutpasses(),
+
+      console.log("Loading dashboard data for Guard");
+      const [passkeyResponse] = await Promise.all([
+        commonAPI.getDailyPasskeyGuard(),
       ])
 
       setPasskey(passkeyResponse.data)
-
-      if (outpassesResponse.data.outpass){
-        const outpasses = outpassesResponse.data.outpass.auditTrail
-        setStats({
-          totalOutpasses: outpasses.length,
-          activeOutpasses: outpasses.filter((op) => op.status === "approved").length,
-          pendingOutpasses: outpasses.filter((op) => op.status === "pending").length,
-        })
-      }
     } catch (error) {
       console.log("Dashboard load error:", error)
       Alert.alert("Error", "Failed to load dashboard data")

@@ -2,7 +2,7 @@
 
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import { studentAPI } from "../services/api"
+import { commonAPI } from "../services/api"
 import { COLORS, FONTS, SIZES, SPACING, OUTPASS_STATUS } from "../utils/constants"
 
 export default function OutpassCard({ outpass, onUpdate }) {
@@ -64,7 +64,7 @@ export default function OutpassCard({ outpass, onUpdate }) {
         style: "destructive",
         onPress: async () => {
           try {
-            const response = await studentAPI.updateOutpass(outpass._id, { status: "cancelled" })
+            const response = await commonAPI.updateOutpass(outpass._id, { status: "cancelled" })
             onUpdate(response.data)
             Alert.alert("Success", "Outpass cancelled successfully")
           } catch (error) {
