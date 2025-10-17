@@ -22,7 +22,7 @@ import LoadingSpinner from "../components/LoadingSpinner"
 export default function LoginScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const [email, setEmail] = useState("")
-  const [role, setRole] = useState("")
+  const [role, setRole] = useState("student")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -35,6 +35,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     setLoading(true)
+    console.log(email, password, role)
     const result = await login(email, password, role)    
     setLoading(false)
 

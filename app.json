@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobile-app",
-    "slug": "mobile-app",
+    "name": "Aegis ID",
+    "slug": "Aegis ID",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,7 +26,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "API_HOST": "localhost"
+      "API_HOST": "10.95.124.171"
     },
     "plugins": [
       "expo-barcode-scanner"

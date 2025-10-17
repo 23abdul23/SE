@@ -11,7 +11,7 @@ const router = express.Router()
 router.post("/register", async (req, res) => {
   try {
 
-    const { name, email, password, Id, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto , role} = req.body
+    const { name, email, password, Id, guardId, wardenId, hostel, roomNumber, phoneNumber, emergencyContact, deviceId, gender, profilePhoto , role} = req.body
     let user;
 
     if(role == "student") {
@@ -80,7 +80,7 @@ router.post("/register", async (req, res) => {
       user = new GuardUser({
       name,
       email,
-      guardId: Id,
+      guardId: guardId,
       phoneNumber,
       emergencyContact,
       deviceId,

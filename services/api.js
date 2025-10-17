@@ -1,16 +1,13 @@
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import Constants from 'expo-constants';
 
-import {IP} from '@env';
-
-
-const API_HOST = IP || "localhost";
-console.log("API_HOST from Constants:", API_HOST)
-
-const API_BASE_URL = `http://${API_HOST}:3000/api`;
+const API_HOST = Constants.expoConfig?.extra?.API_HOST || "localhost";
+const API_BASE_URL = `http://10.95.124.171:3000/api`;
+// const API_BASE_URL = `http://${API_HOST}:3000/api`;
 
 console.log("Current URL: ", API_BASE_URL)
-// Base API configuration
+
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -43,14 +40,12 @@ api.interceptors.response.use(
     return Promise.reject(error)
   },
 )
-
 // Auth API endpoints
 export const authAPI = {
   login: (email, password, role) => api.post("/auth/login", { email, password ,role}),
   register: (userData) => api.post("/auth/register", userData),
   refreshToken: () => api.post("/auth/refresh"),
 }
-
 // Student API endpoints
 export const studentAPI = {
   getProfile: () => api.get("/student/profile"),
