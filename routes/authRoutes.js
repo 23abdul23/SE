@@ -120,39 +120,51 @@ router.post("/register", async (req, res) => {
 // Login user
 router.post("/login", async (req, res) => {
   try {
-
-    const { email, password ,role} = req.body
+    const { email, password, role } = req.body;
 
     let user;
-    // Find user by email
+    // Find user by email depending on role
+    if (role == "student") {
+      user = await User.findOne({ email });
+    } else if (role == "warden") {
+      user = await WardenUser.findOne({ email });
+    } else if (role == "security") {
+      user = await GuardUser.findOne({ email });
+    }
 
-    if (role == 'student'){
-      user = await User.findOne({ email })
-    }
-    else if (role == 'warden'){
-      
-      user = await WardenUser.findOne({ email })
-    }
-    else if (role == 'security'){
-
-      user = await GuardUser.findOne({ email })
-    }
-    
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials Username" })
+      return res.status(400).json({ message: "Invalid credentials: user not found" });
     }
-    
-    
 
+    // Check password correctness
+    let passwordMatches = false;
 
-    // Update last login
-    user.lastLogin = new Date()
-    await user.save()
+    // Prefer common hashed fields
+    if (user.passwordHash) {
+      passwordMatches = await bcrypt.compare(password, user.passwordHash);
+    } else if (user.password) {
+      try {
+        passwordMatches = await bcrypt.compare(password, user.password);
+        if (!passwordMatches) {
+          passwordMatches = password === user.password;
+        }
+      } catch (err) {
+        passwordMatches = password === user.password;
+      }
+    }
+
+    if (!passwordMatches) {
+      return res.status(400).json({ message: "Invalid credentials: incorrect password" });
+    }
+
+    // Update last login after successful authentication
+    user.lastLogin = new Date();
+    await user.save();
 
     // Generate JWT token
     const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
-    })
+    });
 
     res.json({
       message: "Login successful",
@@ -167,10 +179,10 @@ router.post("/login", async (req, res) => {
         hostel: user.hostel,
         roomNumber: user.roomNumber,
       },
-    })
+    });
   } catch (error) {
-    console.error("Login error:", error)
-    res.status(500).json({ message: "Server error during login" })
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error during login" });
   }
 })
 

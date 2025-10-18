@@ -9,7 +9,7 @@ function getLocalIPAddress() {
       }
     }
   }
-  return "10.95.124.171"; // fallback
+  return "10.95.124.171"; // here enter your IP 
 }
 
 console.log("Local IP Address:", getLocalIPAddress());
