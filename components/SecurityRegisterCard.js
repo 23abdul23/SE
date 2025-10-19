@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import AllLocations from '../constants/SecuityLocations.json';
 import { Picker } from '@react-native-picker/picker';
 
-console.log("Loaded security locations:", AllLocations['Locations']);
 
 export default function SecurityRegisterCard({ formData, updateFormData, colors }) {
   return (

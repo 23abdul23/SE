@@ -223,7 +223,6 @@ router.put("/profile", authenticate, async (req, res) => {
 
 router.get("/fetchProfile", async (req, res) => {
   try {
-    console.log(req.query)
     let {user} = req.query
     const role = user.role;
 
