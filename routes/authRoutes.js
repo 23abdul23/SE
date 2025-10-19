@@ -14,6 +14,8 @@ router.post("/register", async (req, res) => {
     const { name, email, password, Id, guardId, wardenId, hostel, roomNumber, phoneNumber,securityPost,  emergencyContact, deviceId, gender, profilePhoto , role} = req.body
     let user;
 
+    const hashPassword = await bcrypt.hash(password, 10)
+
     if(role == "student") {
        // Check if user already exists
     const existingUser = await User.findOne({
@@ -25,11 +27,13 @@ router.post("/register", async (req, res) => {
         message: "User with this email or student ID already exists",
       })
     }
-       // Create new user
-      user = new User({
+
+
+      // Create new user
+    user = new User({
       name,
       email,
-      password: password,
+      password: hashPassword,
       studentId: Id,
       hostel,
       roomNumber,
@@ -56,7 +60,7 @@ router.post("/register", async (req, res) => {
       user = new WardenUser({
       name,
       email,
-      password: password,
+      password: hashPassword,
       hostel,
       phoneNumber,
       deviceId,
