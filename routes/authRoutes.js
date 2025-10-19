@@ -84,6 +84,7 @@ router.post("/register", async (req, res) => {
       user = new GuardUser({
       name,
       email,
+      password: hashPassword,
       location : securityPost,
       guardId: guardId,
       phoneNumber,
@@ -127,21 +128,22 @@ router.post("/login", async (req, res) => {
     const { email, password, role } = req.body;
 
     let user;
+    // Check password correctness
+    let passwordMatches = false;
     // Find user by email depending on role
     if (role == "student") {
       user = await User.findOne({ email });
-    } else if (role == "warden") {
+    } 
+    else if (role == "warden") {
       user = await WardenUser.findOne({ email });
-    } else if (role == "security") {
+    } 
+    else if (role == "security") {
       user = await GuardUser.findOne({ email });
     }
 
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials: user not found" });
     }
-
-    // Check password correctness
-    let passwordMatches = false;
 
     // Prefer common hashed fields
     if (user.passwordHash) {
@@ -218,5 +220,30 @@ router.put("/profile", authenticate, async (req, res) => {
     res.status(500).json({ message: "Server error updating profile" })
   }
 })
+
+router.get("/fetchProfile", async (req, res) => {
+  try {
+    console.log(req.query)
+    let {user} = req.query
+    const role = user.role;
+
+    if (role === "student") {
+      user = await User.findById(user.id).select("-password");
+    } else if (role === "warden") {
+      user = await WardenUser.findById(user.id).select("-password");
+    } else if (role === "security") {
+      user = await GuardUser.findById(user.id).select("-password");
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+    res.status(500).json({ message: "Server error fetching profile" });
+  }
+});
 
 module.exports = router

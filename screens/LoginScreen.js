@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("student")
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("123456")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()

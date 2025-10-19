@@ -1,0 +1,20 @@
+{
+    "Locations" : [
+        "--select location--",
+        "Gate 1",
+        "Gate 2",
+        "(Main Gate) Gate 3",
+        "Gate 4",
+        "Library",
+        "Auditorium",
+        "SAC",
+        "BH 1",
+        "BH 2",
+        "BH 3",
+        "BH 4",
+        "BH 5",
+        "GH 1",
+        "GH 2",
+        "GH 3"
+    ]
+}

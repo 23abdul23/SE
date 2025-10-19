@@ -6,21 +6,18 @@ import { useState, useEffect } from "react"
 import { useTheme } from "../context/ThemeContext"
 import { Ionicons } from "@expo/vector-icons"
 import { useAuth } from "../context/AuthContext"
-import { commonAPI } from "../services/api"
 import styles from "../styles/DashboardStyles"
 
+import api from "../services/api"
 import LoadingSpinner from "../components/LoadingSpinner"
 import PasskeyCard from "../components/PasskeyCard"
 
 export default function GuardDashboardScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const { user, logout } = useAuth()
+
+  const [profile, setProfile] = useState(null)
   const [passkey, setPasskey] = useState(null)
-  const [stats, setStats] = useState({
-    totalOutpasses: 0,
-    activeOutpasses: 0,
-    pendingOutpasses: 0,
-  })
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -30,17 +27,21 @@ export default function GuardDashboardScreen({ navigation }) {
 
   const loadDashboardData = async () => {
     try {
+      const res = await api.get("/auth/fetchProfile", {
+        headers: { Authorization: `Bearer ${user.token}` },
+        params: { 
+          user : user
+        }
+      });
 
-      console.log("Loading dashboard data for Guard");
-      const [passkeyResponse] = await Promise.all([
-        commonAPI.getDailyPasskeyGuard(),
-      ])
-
-      setPasskey(passkeyResponse.data)
-    } catch (error) {
+      setProfile(res.data.user)
+      
+    } 
+    catch (error) {
       console.log("Dashboard load error:", error)
       Alert.alert("Error", "Failed to load dashboard data")
-    } finally {
+    } 
+    finally {
       setLoading(false)
     }
   }
@@ -76,7 +77,7 @@ export default function GuardDashboardScreen({ navigation }) {
           <View>
             <Text style={[styles.greeting, { color: colors.text }]}>Good {getGreeting()}</Text>
             <Text style={[styles.userName, { color: colors.text }]}>{user?.name}</Text>
-            <Text style={[styles.studentId, { color: colors.text }]}>{user?.studentId}</Text>
+            <Text style={[styles.userRole, { color: colors.subText }]}>Current Location: {profile?.location}</Text>
           </View>
 
           <View>
@@ -93,8 +94,7 @@ export default function GuardDashboardScreen({ navigation }) {
       </View>
 
       <View style={styles.content}>
-        {/* Daily Passkey Card */}
-        {/* <PasskeyCard passkey={passkey.passkey} onRefresh={loadDashboardData} /> */}
+        
 
         {/* Quick Actions */}
         <View style={styles.quickActions}>

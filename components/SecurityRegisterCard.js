@@ -2,6 +2,10 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AllLocations from '../constants/SecuityLocations.json';
+import { Picker } from '@react-native-picker/picker';
+
+console.log("Loaded security locations:", AllLocations['Locations']);
 
 export default function SecurityRegisterCard({ formData, updateFormData, colors }) {
   return (
@@ -31,13 +35,16 @@ export default function SecurityRegisterCard({ formData, updateFormData, colors 
       </View>
       <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
         <Ionicons name="shield-outline" size={20} color={colors.text} style={styles.inputIcon} />
-        <TextInput
-          style={[styles.input, { color: colors.text }]}
-          placeholder="Security Post/Area *"
-          placeholderTextColor={colors.text}
-          value={formData.securityPost || ''}
-          onChangeText={value => updateFormData('securityPost', value)}
-        />
+        
+        
+
+        <Picker
+          selectedValue={formData.securityPost}
+          onValueChange={(value) => updateFormData('securityPost', value)}
+          style={{ width: 310 }}
+        >
+          {AllLocations['Locations'].map((loc, index) => <Picker.Item key={index} label={loc} value={loc} />)}
+        </Picker>
       </View>
     </>
   );
