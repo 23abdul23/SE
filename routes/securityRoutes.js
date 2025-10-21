@@ -75,7 +75,6 @@ router.post("/log", authenticate, async (req, res) => {
 
     await log.save()
 
-    console.log(log)
 
     res.status(200).json({
       message: "Security log created successfully",

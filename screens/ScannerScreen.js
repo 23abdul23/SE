@@ -1,51 +1,64 @@
 "use client"
 
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   Alert,
-  SafeAreaView,   // ✅ Add this
-} from "react-native"
-import { useState, useEffect } from "react"
-import { Ionicons } from "@expo/vector-icons"
-import { useTheme } from "../context/ThemeContext"
-import { COLORS, FONTS } from "../utils/constants"
-import LoadingSpinner from "../components/LoadingSpinner"
-import styles from "../styles/ScannerStyles"
-import { CameraView, useCameraPermissions } from "expo-camera"
-
-import { securityAPI } from "../services/api"
+  SafeAreaView,
+  Modal,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import { COLORS, FONTS } from "../utils/constants";
+import LoadingSpinner from "../components/LoadingSpinner";
+import styles from "../styles/ScannerStyles";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { securityAPI } from "../services/api";
+import SafeJourneyCard from "../components/SafeJourneyCard";
+import WelcomeBackCard from "../components/WelcomeBackCard";
 
 export default function Scanner({ navigation }) {
-  const { isDarkMode, toggleTheme, colors } = useTheme()
-  const [permission, requestPermission] = useCameraPermissions()
-  const [scanned, setScanned] = useState(false)
-  const [scanResult, setScanResult] = useState(null)
-  const [action, setAction] = useState(null);
+  const { isDarkMode, toggleTheme, colors } = useTheme();
+  const [permission, requestPermission] = useCameraPermissions();
+  const [scanned, setScanned] = useState(false);
+  const [scanResult, setScanResult] = useState(null);
+  const [action, setAction] = useState("");
+  const [loc, setLoc] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [scanMode, setScanMode] = useState("entry"); // "entry" or "exit"
 
   useEffect(() => {
     if (!permission) {
-      requestPermission()
+      requestPermission();
     }
-  }, [permission])
+  }, [permission]);
+
+  useEffect(() => {
+    if (action === "exit" || action === "entry") {
+      setShowPopup(true);
+      setScanned(true); // Close camera
+    }
+  }, [action]);
 
   const handleBarCodeScanned = async ({ type, data }) => {
     if (!scanned) {
-      setScanned(true)
-      setScanResult(data)
+      setScanned(true);
+      const { guardId, location } = JSON.parse(data);
+      setLoc(location);
+      const responce = await securityAPI.logEntry({
+        action: scanMode,
+        guardId: guardId,
+        location: location,
+      });
+      setAction(responce.data.log.action);
 
-      const {guardId, location} = JSON.parse(data)
-      const responce = await securityAPI.logEntry({'action' : 'entry', 'guardId': guardId, 'location': location})
-
-      // console.log("Responce: " ,responce.data.log)
-      setAction(responce.data.log.action)
-      Alert.alert(`Action: ${responce.data.log.action}`)
     }
-  }
+  };
 
   if (!permission) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (!permission.granted) {
@@ -61,7 +74,7 @@ export default function Scanner({ navigation }) {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    )
+    );
   }
 
   return (
@@ -94,32 +107,73 @@ export default function Scanner({ navigation }) {
         </TouchableOpacity>
       </View>
 
+      
+
       {/* Camera Scanner */}
-      <View
-        style={{
-          flex: 1,
-          overflow: "hidden",
-          borderRadius: 16,
-          margin: 16,
-          borderWidth: 2,
-          borderColor: colors.text,
-        }}
-      >
-        <CameraView
-          style={{ flex: 1 }}
-          barcodeScannerSettings={{
-            barcodeTypes: ["qr", "ean13", "ean8", "code128"], // specify types
+      {!showPopup && (
+        <View
+          style={{
+            flex: 1,
+            overflow: "hidden",
+            borderRadius: 16,
+            margin: 16,
+            borderWidth: 2,
+            borderColor: colors.text,
           }}
-          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-        />
-      </View>
+        >
+          <CameraView
+            style={{ flex: 1 }}
+            barcodeScannerSettings={{
+              barcodeTypes: ["qr", "ean13", "ean8", "code128"],
+            }}
+            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          />
+        </View>
+      )}
+
+      {/* Popup Cards */}
+      <Modal
+        visible={showPopup}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowPopup(false)}
+      >
+        <View style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.3)",
+        }}>
+          {action === "exit" && (
+            <SafeJourneyCard
+              onClose={() => {
+                setShowPopup(false);
+                setScanned(false);
+                setAction(null);
+                setScanResult(null);
+                navigation.goBack();
+              }} location={loc} />
+          )}
+          {action === "entry" && (
+            <WelcomeBackCard
+              onClose={() => {
+                setShowPopup(false);
+                setScanned(false);
+                setAction(null);
+                setScanResult(null);
+                navigation.goBack();
+              }} location={loc} />
+          )}
+        </View>
+      </Modal>
 
       {/* Buttons & Result */}
-      {scanned && (
+      {scanned && !showPopup && (
         <TouchableOpacity
           onPress={() => {
-            setScanned(false)
-            setScanResult(null)
+            setScanned(false);
+            setScanResult(null);
+            setAction(null);
           }}
           style={{
             backgroundColor: colors.card,
@@ -132,13 +186,7 @@ export default function Scanner({ navigation }) {
           <Text style={{ color: colors.text, fontFamily: FONTS.bold }}>Tap to Scan Again</Text>
         </TouchableOpacity>
       )}
-      {scanResult && (
-        <View style={{ alignItems: "center", marginBottom: 16 }}>
-          <Text style={{ color: colors.text, fontFamily: FONTS.regular }}>
-            Action : {action}
-          </Text>
-        </View>
-      )}
+      
     </SafeAreaView>
-  )
+  );
 }
