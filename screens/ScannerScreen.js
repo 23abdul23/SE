@@ -15,11 +15,14 @@ import LoadingSpinner from "../components/LoadingSpinner"
 import styles from "../styles/ScannerStyles"
 import { CameraView, useCameraPermissions } from "expo-camera"
 
+import { securityAPI } from "../services/api"
+
 export default function Scanner({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme()
   const [permission, requestPermission] = useCameraPermissions()
   const [scanned, setScanned] = useState(false)
   const [scanResult, setScanResult] = useState(null)
+  const [action, setAction] = useState(null);
 
   useEffect(() => {
     if (!permission) {
@@ -27,11 +30,17 @@ export default function Scanner({ navigation }) {
     }
   }, [permission])
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     if (!scanned) {
       setScanned(true)
       setScanResult(data)
-      Alert.alert("Scanned!", `Type: ${type}\nData: ${data}`)
+
+      const {guardId, location} = JSON.parse(data)
+      const responce = await securityAPI.logEntry({'action' : 'entry', 'guardId': guardId, 'location': location})
+
+      // console.log("Responce: " ,responce.data.log)
+      setAction(responce.data.log.action)
+      Alert.alert(`Action: ${responce.data.log.action}`)
     }
   }
 
@@ -126,7 +135,7 @@ export default function Scanner({ navigation }) {
       {scanResult && (
         <View style={{ alignItems: "center", marginBottom: 16 }}>
           <Text style={{ color: colors.text, fontFamily: FONTS.regular }}>
-            Result: {scanResult}
+            Action : {action}
           </Text>
         </View>
       )}

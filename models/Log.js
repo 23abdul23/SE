@@ -16,6 +16,14 @@ const logSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    guardId: {
+      type: String,
+      trim: true,
+    },
+    guardName: {
+      type: String,
+      trim: true,
+    },  
     deviceInfo: {
       type: String,
       trim: true,
@@ -42,6 +50,7 @@ const logSchema = new mongoose.Schema(
     scanType: {
       type: String,
       enum: ["qr", "nfc", "manual"],
+      default: "qr",
     },
   },
   {

@@ -146,14 +146,14 @@ export default function GuardDashboardScreen({ navigation }) {
 
         {/* QR card centered and styled like PasskeyCard */}
         <View style={localStyles.qrWrapper}>
-          <View style={[localStyles.qrCard, { backgroundColor: COLORS.white }]}>
+          <View style={[localStyles.qrCardLarge, { backgroundColor: COLORS.white }]}>
             <QRCode
               value={JSON.stringify({
                 guardName: user?.name,
                 guardId: user?.guardId,
                 location: loc
               })}
-              size={150}
+              size={200}
               color={COLORS.gray[800]}
               backgroundColor={COLORS.white}
             />
@@ -232,15 +232,18 @@ const localStyles = StyleSheet.create({
     marginTop: SPACING.md,
     marginBottom: SPACING.lg,
   },
-  qrCard: {
+  qrCardLarge: {
     alignItems: 'center',
-    borderRadius: 16,
-    padding: SPACING.lg,
+    borderRadius: 24,
+    padding: SPACING.xl,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.16,
+    shadowRadius: 16,
+    elevation: 8,
+    minWidth: 260,
+    minHeight: 260,
+    justifyContent: 'center',
   },
   qrNote: {
     fontSize: SIZES.xs,
