@@ -239,7 +239,7 @@ router.get("/fetchProfile", async (req, res) => {
     res.json({ user });
   } catch (error) {
     console.error("Profile fetch error:", error);
-    res.status(500).json({ message: "Server error fetching profile" });
+    res.status(500).json({message: "Server error fetching profile"});
   }
 });
 
