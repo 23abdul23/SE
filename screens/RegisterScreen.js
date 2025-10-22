@@ -24,13 +24,14 @@ import WardenRegisterCard from "../components/WardenRegisterCard";
 import SecurityRegisterCard from "../components/SecurityRegisterCard";
 import LoadingSpinner from "../components/LoadingSpinner"
 
-import * as Device from "expo-device";
-import * as Application from "expo-application";
+import * as Application from 'expo-application';
+import * as Device from 'expo-device';
+
 
 export default function RegisterScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
-
-  const randomDeviceId = Math.floor(100000 + Math.random() * 900000);
+    
+  const deviceId = Application.androidId || Device.osBuildId;
 
   const [formData, setFormData] = useState({
     name: "Abdul Azeem",
@@ -49,7 +50,7 @@ export default function RegisterScreen({ navigation }) {
     guardId : "",
     wardenId : "",
     profilePhoto: "",
-    deviceId : randomDeviceId
+    deviceId : deviceId
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
