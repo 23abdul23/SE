@@ -39,9 +39,9 @@ export default function RegisterScreen({ navigation }) {
     email: "23abdulazeem23@gmail.com",
     password: "123456",
     confirmPassword: "123456",
-    Id: "iit2024243",
+    Id: "IIT2024243",
     department: "IT",
-    role: "student",
+    role: "",
     year: "2nd Year",
     hostel: "BH 3",
     roomNumber: "818",
@@ -110,7 +110,7 @@ export default function RegisterScreen({ navigation }) {
     setLoading(false)
 
     if (result.success) {
-      Alert.alert("Registration Successful", "Your account has been created. Please wait for admin approval.", [
+      Alert.alert("Registration Successful", "Your account has been created.", [
         { text: "OK", onPress: () => navigation.navigate("Login") },
       ])
     } else {

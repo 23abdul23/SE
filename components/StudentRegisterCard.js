@@ -11,7 +11,7 @@ export default function StudentRegisterCard({ formData, updateFormData, departme
         <Ionicons name="mail-outline" size={20} color={colors.text} style={styles.inputIcon} />
         <TextInput
           style={[styles.input, { color: colors.text }]}
-          placeholder="Email Address *"
+          placeholder="Email Address*"
           placeholderTextColor={colors.text}
           value={formData.email}
           onChangeText={value => updateFormData('email', value)}
@@ -26,7 +26,7 @@ export default function StudentRegisterCard({ formData, updateFormData, departme
           placeholder="Student ID*"
           placeholderTextColor={colors.text}
           value={formData.studentId}
-          onChangeText={value => updateFormData('Id', value)}
+          onChangeText={value => updateFormData('studentId', value)}
           autoCapitalize="characters"
         />
       </View>

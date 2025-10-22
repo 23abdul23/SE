@@ -59,7 +59,7 @@ router.post("/log", authenticate, async (req, res) => {
     if (totalLogs > 0){
       const entryLog = await Log.findOne({ userId : req.user._id}).sort({ timestamp: -1 })
 
-      if (entryLog.action == "entry"){
+      if (entryLog && entryLog.action == "entry"){
           action = "exit"
       }
     }
