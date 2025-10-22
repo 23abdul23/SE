@@ -86,6 +86,7 @@
     "react-native-css-transformer": "^2.0.0",
     "react-native-device-info": "^14.1.1",
     "react-native-gesture-handler": "latest",
+    "react-native-image-picker": "^8.2.1",
     "react-native-qrcode-svg": "latest",
     "react-native-safe-area-context": "latest",
     "react-native-screens": "latest",
@@ -97,7 +98,8 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "3.25.67"
+    "zod": "3.25.67",
+    "expo-image-picker": "~16.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

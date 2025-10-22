@@ -26,8 +26,8 @@ export default function EmergencyScreen() {
       title: "Medical Emergency",
       description: "Health issues, accidents, injuries",
       icon: "medical",
-      color: COLORS.error,
-      backgroundColor: COLORS.error + "20",
+      color: COLORS.success,
+      backgroundColor: COLORS.success + "20",
     },
     {
       type: EMERGENCY_TYPES.SECURITY,
@@ -189,7 +189,7 @@ export default function EmergencyScreen() {
           </View>
         </View>
 
-        {/* Emergency Contacts */}
+        {/* Emergency Contacts
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Emergency Contacts</Text>
           <Text style={[styles.sectionDescription, { color: colors.text }]}>Direct contact numbers for immediate assistance</Text>
@@ -207,30 +207,9 @@ export default function EmergencyScreen() {
               <Ionicons name="chevron-forward" size={20} color={colors.text} />
             </TouchableOpacity>
           ))}
-        </View>
+        </View> */}
 
-        {/* Safety Tips */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Safety Tips</Text>
-          <View style={[styles.tipsContainer, { backgroundColor: colors.card }]}> 
-            <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color={isDarkMode ? '#4caf50' : '#4caf50'} />
-              <Text style={[styles.tipText, { color: colors.text }]}>Stay calm and assess the situation</Text>
-            </View>
-            <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color={isDarkMode ? '#4caf50' : '#4caf50'} />
-              <Text style={[styles.tipText, { color: colors.text }]}>Move to a safe location if possible</Text>
-            </View>
-            <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color={isDarkMode ? '#4caf50' : '#4caf50'} />
-              <Text style={[styles.tipText, { color: colors.text }]}>Follow instructions from security personnel</Text>
-            </View>
-            <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color={isDarkMode ? '#4caf50' : '#4caf50'} />
-              <Text style={[styles.tipText, { color: colors.text }]}>Keep your phone charged and accessible</Text>
-            </View>
-          </View>
-        </View>
+        
       </View>
     </ScrollView>
   )

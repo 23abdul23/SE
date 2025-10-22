@@ -45,15 +45,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    profilePhoto: {
-      type: String,
-      trim: true,
-    },
-    deviceId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     studentId: {
       type: String,
       sparse: true,

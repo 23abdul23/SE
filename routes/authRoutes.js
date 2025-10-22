@@ -11,9 +11,8 @@ const router = express.Router()
 router.post("/register", async (req, res) => {
   try {
 
-    const { name, email, password, Id, guardId, wardenId, hostel, roomNumber, phoneNumber,securityPost,  emergencyContact, deviceId, gender, profilePhoto , role} = req.body
+    const { name, email, password, Id, guardId, wardenId, hostel, roomNumber, phoneNumber,securityPost,  emergencyContact, deviceId, gender , role} = req.body
     let user;
-
     const hashPassword = await bcrypt.hash(password, 10)
 
     if(role == "student") {
@@ -39,7 +38,6 @@ router.post("/register", async (req, res) => {
       roomNumber,
       phoneNumber,
       emergencyContact,
-      deviceId,
       gender,
       profilePhoto
     })

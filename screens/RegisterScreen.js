@@ -1,9 +1,9 @@
-
 import React from 'react';
 
 "use client"
 import {
   View,
+  Button,
   Text,
   TextInput,
   TouchableOpacity,
@@ -12,8 +12,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from "react-native"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { useTheme } from "../context/ThemeContext"
 import { Picker } from "@react-native-picker/picker"
@@ -30,40 +31,39 @@ import * as Device from 'expo-device';
 
 export default function RegisterScreen({ navigation }) {
   const { isDarkMode, toggleTheme, colors } = useTheme();
-    
+
   const deviceId = Application.androidId || Device.osBuildId;
 
   const [formData, setFormData] = useState({
     name: "Abdul Azeem",
-    email: "23abdul23@gmail.com",
+    email: "23abdulazeem23@gmail.com",
     password: "123456",
     confirmPassword: "123456",
     Id: "iit2024243",
     department: "IT",
     role: "student",
     year: "2nd Year",
-    hostel: "Hostel A",
+    hostel: "BH 3",
     roomNumber: "818",
     phone: "9876543210",
     gender: "male",
     securityPost: "",
-    guardId : "",
-    wardenId : "",
-    profilePhoto: "",
-    deviceId : deviceId
+    guardId: "",
+    wardenId: "",
+    deviceId: deviceId
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const { register } = useAuth()
 
-  const departments = ["IT","Computer Science", "Electronics", "Mechanical", "Civil", "Chemical", "Electrical"]
+  const departments = ["IT", "IT BI","Electronics"]
 
   const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
 
   const roles = ["student", "warden", "security"]
 
-  const hostels = ["Hostel A", "Hostel B", "Hostel C", "Hostel D"]
+  const hostels = ["BH 1", "BH 2", "BH 3", "BH 4", "BH 5", "GH 1", "GH 2", "GH 3"]
 
   const updateFormData = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }))
@@ -139,7 +139,7 @@ export default function RegisterScreen({ navigation }) {
           <Text style={[styles.subtitle, { color: colors.text }]}>Join Aegis ID Campus Pass</Text>
         </View>
         <View style={styles.form}>
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}>
             <Ionicons name="person-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -150,7 +150,7 @@ export default function RegisterScreen({ navigation }) {
               autoCapitalize="words"
             />
           </View>
-          <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+          <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}>
             <Ionicons name="library-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <Picker
               selectedValue={formData.role}
@@ -189,7 +189,7 @@ export default function RegisterScreen({ navigation }) {
             />
           )}
           {/* Common fields for all roles */}
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}>
             <Ionicons name="call-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -200,7 +200,7 @@ export default function RegisterScreen({ navigation }) {
               keyboardType="phone-pad"
             />
           </View>
-          <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+          <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}>
             <Ionicons name="male-female-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <Picker
               selectedValue={formData.gender}
@@ -213,17 +213,8 @@ export default function RegisterScreen({ navigation }) {
               <Picker.Item label="Other" value="other" />
             </Picker>
           </View>
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
-            <Ionicons name="image-outline" size={20} color={colors.text} style={styles.inputIcon} />
-            <TextInput
-              style={[styles.input, { color: colors.text }]}
-              placeholder="Profile Photo URL (optional)"
-              placeholderTextColor={colors.text}
-              value={formData.profilePhoto}
-              onChangeText={(value) => updateFormData("profilePhoto", value)}
-            />
-          </View>
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}>
             <Ionicons name="lock-closed-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -237,7 +228,7 @@ export default function RegisterScreen({ navigation }) {
               <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
-          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+          <View style={[styles.inputContainer, { backgroundColor: colors.card, borderColor: colors.text }]}>
             <Ionicons name="lock-closed-outline" size={20} color={colors.text} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -261,7 +252,7 @@ export default function RegisterScreen({ navigation }) {
         </View>
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: colors.text }]}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}> 
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={[styles.signInText, { color: colors.text }]}>Sign In</Text>
           </TouchableOpacity>
         </View>
