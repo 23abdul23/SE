@@ -31,8 +31,13 @@ router.put('/profile', authenticate, async(req, res) => {
     }
 
     user.name = req.body.name;
-    user.phoneNumber = req.body.phone;
+    user.phoneNumber = req.body.phoneNumber;
     user.roomNumber = req.body.roomNumber;
+    user.email = req.body.email;
+    user.studentId = req.body.studentId;
+    user.hostel = req.body.hostel;
+    user.year = req.body.year;
+    user.department = req.body.department;
 
     await user.save();
 

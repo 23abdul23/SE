@@ -100,7 +100,7 @@ export default function DashboardScreen({ navigation }) {
 
       <View style={styles.content}>
         {/* Daily Passkey Card */}
-        <PasskeyCard passkey={passkey.passkey} onRefresh={loadDashboardData} />
+        <PasskeyCard passkey={passkey?.passkey} onRefresh={loadDashboardData} />
 
         {/* Quick Actions */}
         <View style={styles.quickActions}>

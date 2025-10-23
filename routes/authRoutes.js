@@ -11,7 +11,7 @@ const router = express.Router()
 router.post("/register", async (req, res) => {
   try {
     console.log("INCOMING REGISTRATION DATA:", req.body);
-    const { name, email, password, studentId, guardId, wardenId, hostel, roomNumber, phoneNumber, securityPost, emergencyContact, gender , role} = req.body
+    const { name, email, password, studentId, guardId, wardenId, hostel, roomNumber, phoneNumber, securityPost, emergencyContact, gender, year, department, role} = req.body
     let user;
     const hashPassword = await bcrypt.hash(password, 10)
 
@@ -39,6 +39,8 @@ router.post("/register", async (req, res) => {
       phoneNumber,
       emergencyContact,
       gender,
+      year,
+      department,
       
     })
 
@@ -203,11 +205,11 @@ router.get("/profile", authenticate, async (req, res) => {
 // Update user profile
 router.put("/profile", authenticate, async (req, res) => {
   try {
-    const { name, phoneNumber, emergencyContact, hostel, roomNumber, gender,  } = req.body
+    const { name, phoneNumber, email, studentId, emergencyContact, hostel, roomNumber, year, department } = req.body
 
     const user = await User.findByIdAndUpdate(
       req.user.userId,
-      { name, phoneNumber, emergencyContact, hostel, roomNumber, gender,  },
+      { name, phoneNumber, email, studentId, emergencyContact, hostel, roomNumber, year, department },
       { new: true },
     ).select("-password")
 
