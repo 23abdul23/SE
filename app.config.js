@@ -45,7 +45,8 @@ module.exports = {
       API_HOST: getLocalIPAddress()
     },
     plugins: [
-      "expo-barcode-scanner"
+      "expo-barcode-scanner",
+      "expo-font"
     ]
   }
 };

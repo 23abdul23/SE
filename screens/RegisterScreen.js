@@ -39,9 +39,9 @@ export default function RegisterScreen({ navigation }) {
     email: "23abdulazeem23@gmail.com",
     password: "123456",
     confirmPassword: "123456",
-    Id: "IIT2024243",
+    // Id: "iit2024243",
     department: "IT",
-    role: "",
+    role: "student",
     year: "2nd Year",
     hostel: "BH 3",
     roomNumber: "818",
@@ -50,6 +50,7 @@ export default function RegisterScreen({ navigation }) {
     securityPost: "",
     guardId: "",
     wardenId: "",
+    studentId: "",
     deviceId: deviceId
   })
   const [showPassword, setShowPassword] = useState(false)
@@ -70,9 +71,9 @@ export default function RegisterScreen({ navigation }) {
   }
 
   const validateForm = () => {
-    const { name, email, password, confirmPassword, Id, department, year, hostel, phone, gender, deviceId } = formData
+    const { name, email, password, confirmPassword, studentId, department, year, hostel, phone, gender, deviceId } = formData
 
-    if (!name || !email || !password || !Id || !department || !year || !hostel || !phone || !gender) {
+    if (!name || !email || !password || !studentId || !department || !year || !hostel || !phone || !gender) {
       Alert.alert("Error", "Please fill in all required fields")
       return false
     }

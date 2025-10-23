@@ -41,11 +41,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    deviceId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    // deviceId: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
     isActive: {
       type: Boolean,
       default: true,

@@ -39,11 +39,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    deviceId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    // deviceId: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
     guardId: {
       type: String,
       sparse: true,

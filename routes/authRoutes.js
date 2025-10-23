@@ -10,15 +10,15 @@ const router = express.Router()
 // Register new user
 router.post("/register", async (req, res) => {
   try {
-
-    const { name, email, password, Id, guardId, wardenId, hostel, roomNumber, phoneNumber,securityPost,  emergencyContact, deviceId, gender , role} = req.body
+    console.log("INCOMING REGISTRATION DATA:", req.body);
+    const { name, email, password, studentId, guardId, wardenId, hostel, roomNumber, phoneNumber, securityPost, emergencyContact, gender , role} = req.body
     let user;
     const hashPassword = await bcrypt.hash(password, 10)
 
     if(role == "student") {
        // Check if user already exists
     const existingUser = await User.findOne({
-      $or: [{ email }, { Id }],
+      $or: [{ email }, { studentId }],
     })
 
     if (existingUser) {
@@ -33,13 +33,13 @@ router.post("/register", async (req, res) => {
       name,
       email,
       password: hashPassword,
-      studentId: Id,
+      studentId,
       hostel,
       roomNumber,
       phoneNumber,
       emergencyContact,
       gender,
-      profilePhoto
+      
     })
 
     }
@@ -61,9 +61,8 @@ router.post("/register", async (req, res) => {
       password: hashPassword,
       hostel,
       phoneNumber,
-      deviceId,
+      
       gender,
-      profilePhoto
     })
     }
     else {
@@ -87,9 +86,9 @@ router.post("/register", async (req, res) => {
       guardId: guardId,
       phoneNumber,
       emergencyContact,
-      deviceId,
+      
       gender,
-      profilePhoto
+      
     })
     }
    
@@ -185,7 +184,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login error:", error);1      
     res.status(500).json({ message: "Server error during login" });
   }
 })
@@ -204,11 +203,11 @@ router.get("/profile", authenticate, async (req, res) => {
 // Update user profile
 router.put("/profile", authenticate, async (req, res) => {
   try {
-    const { name, phoneNumber, emergencyContact, hostel, roomNumber, gender, profilePhoto } = req.body
+    const { name, phoneNumber, emergencyContact, hostel, roomNumber, gender,  } = req.body
 
     const user = await User.findByIdAndUpdate(
       req.user.userId,
-      { name, phoneNumber, emergencyContact, hostel, roomNumber, gender, profilePhoto },
+      { name, phoneNumber, emergencyContact, hostel, roomNumber, gender,  },
       { new: true },
     ).select("-password")
 
