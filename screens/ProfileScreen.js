@@ -104,12 +104,41 @@ export default function ProfileScreen() {
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Email</Text>
+             {editing ? (
+              <TextInput
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+                value={profile?.email || ""}
+                onChangeText={(value) => updateProfile("email", value)}
+              />
+            ) : (
             <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.email}</Text>
+            )}
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Password</Text>
+            {editing ? (
+              <TextInput
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+                value={profile?.password || ""}
+                onChangeText={(value) => updateProfile("password", value)}
+              />
+            ) : (
+            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.password}</Text>
+            )}
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Student ID</Text>
+            {editing ? (
+              <TextInput
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+                value={profile?.studentId || ""}
+                onChangeText={(value) => updateProfile("studentId", value)}
+              />
+            ) : (
             <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.studentId}</Text>
+            )}
           </View>
 
           <View style={styles.fieldContainer}>
@@ -117,32 +146,58 @@ export default function ProfileScreen() {
             {editing ? (
               <TextInput
                 style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
-                value={profile?.phone || ""}
-                onChangeText={(value) => updateProfile("phone", value)}
+                value={profile?.phoneNumber || ""}
+                onChangeText={(value) => updateProfile("phoneNumber", value)}
                 keyboardType="phone-pad"
               />
             ) : (
-              <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.phone}</Text>
+              <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.phoneNumber}</Text>
             )}
           </View>
         </View>
 
         <View style={[styles.section, { backgroundColor: colors.card }]}> 
+          <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Academic Information</Text>
+          </View>
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Department</Text>
+             {editing ? (
+              <TextInput
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+                value={profile?.department || ""}
+                onChangeText={(value) => updateProfile("department", value)}
+              />
+            ) : (
             <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.department}</Text>
+            )}
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Year</Text>
+             {editing ? (
+              <TextInput
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+                value={profile?.year || ""}
+                onChangeText={(value) => updateProfile("year", value)}
+              />
+            ) : (
             <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.year}</Text>
+            )}
           </View>
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Hostel</Text>
+             {editing ? (
+              <TextInput
+                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+                value={profile?.hostel || ""}
+                onChangeText={(value) => updateProfile("hostel", value)}
+              />
+            ) : (
             <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.hostel}</Text>
+            )}
           </View>
 
           <View style={styles.fieldContainer}>
@@ -159,6 +214,7 @@ export default function ProfileScreen() {
           </View>
         </View>
 
+    
         <View style={[styles.section, { backgroundColor: colors.card }]}> 
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Account Status</Text>
 

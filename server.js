@@ -19,7 +19,7 @@ const studentRoutes = require("./routes/studentRoutes")
 const forgotRoutes = require("./routes/forgotRoute")
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
 // Connect to database
 connectDB()

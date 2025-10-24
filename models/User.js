@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["male", "female", "other"],      
     },
+    department: {
+      type: String,
+      enum: ["IT", "IT BI","Electronics"],
+    },
+    year: {
+      type: String,
+      enum: ["1st Year", "2nd Year", "3rd Year", "4th Year"],
+    },
     hostel: {
       type: String,
       trim: true,
