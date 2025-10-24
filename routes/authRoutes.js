@@ -7,6 +7,7 @@ const GuardUser = require("../models/GuardUser")
 const { authenticate } = require("../middleware/auth");
 const router = express.Router()
 
+
 // Register new user
 router.post("/register", async (req, res) => {
   try {

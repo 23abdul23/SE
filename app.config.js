@@ -18,6 +18,7 @@ module.exports = {
   expo: {
     name: "Aegis ID",
     slug: "Aegis ID",
+    scheme: "aegisid",   // to respond to the aegisid URL
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
