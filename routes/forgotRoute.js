@@ -20,7 +20,6 @@ let transporter = nodemailer.createTransport({
 
 router.post('/', async (req , res) => {
 
-    console.log(req.body);
     try{
         const { email } = req.body;
         const newPassword = Math.random().toString(36).slice(-8); 
@@ -30,11 +29,8 @@ router.post('/', async (req , res) => {
         if (!user){
             return  res.status(404).json({ message: 'User not found' });
         }
-        console.log("before: ", user);
         user.password = await bcrypt.hash(newPassword, 10);
-        console.log("after: ", user);
 
-        console.log(newPassword)
         await user.save();
 
         let mailOptions = {
