@@ -62,9 +62,9 @@ export default function RegisterScreen({ navigation }) {
 
   const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
 
-  const roles = ["student", "warden", "security"]
-
   const hostels = ["BH 1", "BH 2", "BH 3", "BH 4", "BH 5", "GH 1", "GH 2", "GH 3"]
+  
+  const roles = ["student", "warden", "security"]
 
   const updateFormData = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }))

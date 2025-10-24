@@ -45,4 +45,12 @@ router.put('/profile', authenticate, async(req, res) => {
 
 })
 
+router.put('/passwordUpdate', authenticate, async (req, res) => {
+    const {confirmPassword, newPassword} = req.body.currentPassword
+    const user = await User.findOne( {studentId : req.user.studentId})
+    user.password = newPassword
+    await user.save()
+    return res.status(200).json({message: "Password Updated Successfully"})
+})
+
 module.exports = router

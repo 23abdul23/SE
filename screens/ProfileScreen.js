@@ -9,6 +9,8 @@ import { commonAPI } from "../services/api"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 import LoadingSpinner from "../components/LoadingSpinner"
 
+import { Picker } from "@react-native-picker/picker"
+
 export default function ProfileScreen() {
   const { isDarkMode, toggleTheme, colors } = useTheme();
   const { user, logout } = useAuth()
@@ -16,6 +18,20 @@ export default function ProfileScreen() {
   const [editing, setEditing] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  // password update state
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [pwdSaving, setPwdSaving] = useState(false)
+  const [showCurrent, setShowCurrent] = useState(false)
+  const [showNew, setShowNew] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  const departments = ["IT", "IT BI","Electronics"]
+
+  const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
+
+  const hostels = ["BH 1", "BH 2", "BH 3", "BH 4", "BH 5", "GH 1", "GH 2", "GH 3"]
 
   useEffect(() => {
     loadProfile()
@@ -24,7 +40,6 @@ export default function ProfileScreen() {
   const loadProfile = async () => {
     try {
       const response = await commonAPI.getProfile()
-      console.log('front:',response.data)
       setProfile(response.data.userData)
     } catch (error) {
       console.log("Profile load error:", error)
@@ -57,7 +72,6 @@ export default function ProfileScreen() {
   if (loading) {
     return <LoadingSpinner />
   }
-  console.log(profile)
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}> 
       <View style={[styles.header, { backgroundColor: colors.card }]}> 
@@ -116,19 +130,6 @@ export default function ProfileScreen() {
           </View>
 
           <View style={styles.fieldContainer}>
-            <Text style={[styles.fieldLabel, { color: colors.text }]}>Password</Text>
-            {editing ? (
-              <TextInput
-                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
-                value={profile?.password || ""}
-                onChangeText={(value) => updateProfile("password", value)}
-              />
-            ) : (
-            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.password}</Text>
-            )}
-          </View>
-
-          <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Student ID</Text>
             {editing ? (
               <TextInput
@@ -160,45 +161,68 @@ export default function ProfileScreen() {
           <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Academic Information</Text>
           </View>
+          {
+          !editing ? (
+            <>
+              <View style={styles.fieldContainer}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>Department</Text>
+                <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.department}</Text>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={[styles.fieldLabel, { color: colors.text }]}>Department</Text>
-             {editing ? (
-              <TextInput
-                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
-                value={profile?.department || ""}
-                onChangeText={(value) => updateProfile("department", value)}
-              />
-            ) : (
-            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.department}</Text>
-            )}
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>Year</Text>
+                <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.year}</Text>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={[styles.fieldLabel, { color: colors.text }]}>Year</Text>
-             {editing ? (
-              <TextInput
-                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
-                value={profile?.year || ""}
-                onChangeText={(value) => updateProfile("year", value)}
-              />
-            ) : (
-            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.year}</Text>
-            )}
-          </View>
+              <View style={styles.fieldContainer}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>Hostel</Text>
+                <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.hostel}</Text>
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+                <Ionicons name="library-outline" size={20} color={colors.text} style={styles.inputIcon}/> 
+                <Picker
+                  selectedValue={profile.department || "Select Department *"}
+                  style={styles.picker}
+                  onValueChange={value => updateProfile('department', value)}>
+                  <Picker.Item label="Select Department *" value="" />
+                  {departments.map(dept => (
+                    <Picker.Item key={dept} label={dept} value={dept} />
+                  ))}
+                </Picker>
+              </View>
+              <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+                <Ionicons name="calendar-outline" size={20} color={colors.text} style={styles.inputIcon} />
+                <Picker
+                  selectedValue={profile.year || "Select Year *"}
+                  style={styles.picker}
+                  onValueChange={value => updateProfile('year', value)}>
+                  <Picker.Item label="Select Year *" value="" />
+                  {years.map(y => (
+                    <Picker.Item key={y} label={y} value={y} />
+                  ))}
+                </Picker>
+              </View>
+              <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.text }]}> 
+                <Ionicons name="home-outline" size={20} color={colors.text} style={styles.inputIcon} />
+                <Picker
+                  selectedValue={profile.hostel || "Select Hostel *"}
+                  style={styles.picker}
+                  onValueChange={value => updateProfile('hostel', value)}>
+                  <Picker.Item label="Select Hostel *" value="" />
+                  {hostels.map(h => (
+                    <Picker.Item key={h} label={h} value={h} />
+                  ))}
+                </Picker>
+              </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={[styles.fieldLabel, { color: colors.text }]}>Hostel</Text>
-             {editing ? (
-              <TextInput
-                style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
-                value={profile?.hostel || ""}
-                onChangeText={(value) => updateProfile("hostel", value)}
-              />
-            ) : (
-            <Text style={[styles.fieldValue, { color: colors.text }]}>{profile?.hostel}</Text>
-            )}
-          </View>
+              </>
+            )
+          }
+              
+              
 
           <View style={styles.fieldContainer}>
             <Text style={[styles.fieldLabel, { color: colors.text }]}>Room Number</Text>
@@ -214,7 +238,117 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-    
+        
+        <View style={[styles.section, { backgroundColor: colors.card }]}> 
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Change Password</Text>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Current Password</Text>
+            <TextInput
+              style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+              value={currentPassword}
+              onChangeText={setCurrentPassword}
+              secureTextEntry={!showCurrent}
+              placeholder="Enter current password"
+              placeholderTextColor={colors.subText}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity onPress={() => setShowCurrent(v => !v)} style={{ position: 'absolute', right: 12, top: 34 }}>
+              <Ionicons name={showCurrent ? "eye-outline" : "eye-off-outline"} size={18} color={colors.subText} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>New Password</Text>
+            <TextInput
+              style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+              value={newPassword}
+              onChangeText={setNewPassword}
+              secureTextEntry={!showNew}
+              placeholder="Enter new password"
+              placeholderTextColor={colors.subText}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity onPress={() => setShowNew(v => !v)} style={{ position: 'absolute', right: 12, top: 34 }}>
+              <Ionicons name={showNew ? "eye-outline" : "eye-off-outline"} size={18} color={colors.subText} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>Confirm New Password</Text>
+            <TextInput
+              style={[styles.fieldInput, { color: colors.text, borderBottomColor: colors.text }]}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry={!showConfirm}
+              placeholder="Confirm new password"
+              placeholderTextColor={colors.subText}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity onPress={() => setShowConfirm(v => !v)} style={{ position: 'absolute', right: 12, top: 34 }}>
+              <Ionicons name={showConfirm ? "eye-outline" : "eye-off-outline"} size={18} color={colors.subText} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: 12 }}>
+            <TouchableOpacity
+              onPress={() => {
+                // clear fields
+                setCurrentPassword("")
+                setNewPassword("")
+                setConfirmPassword("")
+              }}
+              style={{ padding: 10, marginRight: 8 }}
+            >
+              <Text style={{ color: colors.text }}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={async () => {
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                  Alert.alert("Error", "Please fill all password fields")
+                  return
+                }
+                if (newPassword !== confirmPassword) {
+                  Alert.alert("Error", "New password and confirm password do not match")
+                  return
+                }
+                if (newPassword.length < 6) {
+                  Alert.alert("Error", "New password must be at least 6 characters")
+                  return
+                }
+                try {
+                  setPwdSaving(true)
+                  const res = await commonAPI.changePassword({ currentPassword, newPassword })
+
+                  console.log(res.message)
+                  
+                  setPwdSaving(false)
+
+                  if (res?.data?.success) {
+                    Alert.alert("Success", res.data.message || "Password updated")
+                    setCurrentPassword("")
+                    setNewPassword("")
+                    setConfirmPassword("")
+                  } else {
+                    Alert.alert("Error", res?.data?.message || "Failed to change password")
+                  }
+                } catch (err) {
+                  setPwdSaving(false)
+                  console.log("Change password error", err)
+                  Alert.alert("Error", err?.response?.data?.message || err.message || "Server error")
+                }
+              }}
+              style={[styles.editButton, { paddingHorizontal: 16 }]}
+              disabled={pwdSaving}
+            >
+              <Ionicons name="key-outline" size={18} color={colors.text} />
+              <Text style={[styles.editButtonText, { color: colors.text, marginLeft: SPACING.xs }]}>{pwdSaving ? "Updating..." : "Update Password"}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={[styles.section, { backgroundColor: colors.card }]}> 
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Account Status</Text>
 
