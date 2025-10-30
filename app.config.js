@@ -42,6 +42,7 @@ module.exports = {
       favicon: "./assets/favicon.png"
     },
     extra: {
+      PORT : 3000,
       API_HOST: getLocalIPAddress()
     },
     plugins: [

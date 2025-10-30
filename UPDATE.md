@@ -25,7 +25,7 @@
 
 - On the login screen, enter your email through which you have created an account on the app. Then click on "Forgot Password?". A pop-up menu will appear on your screen where u have to enter the same email id through which you are trying to login.
 
-*** REMEMBER ONLY THAT EMAIL WILL BE ACCEPTED FOR WHICH A USER EXISTS IN THE DATABASE ***
+### REMEMBER ONLY THAT EMAIL WILL BE ACCEPTED FOR WHICH A USER EXISTS IN THE DATABASE ###
 
 - For instance enter your college email id (make sure that you have first created an accoount thorugh that email id)and then click on "Send". A mail will come in your inbox from aegisid777@gmail.com
 

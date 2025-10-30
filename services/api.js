@@ -3,9 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import Constants from 'expo-constants';
 
 
+const PORT = Constants.expoConfig?.extra?.PORT || 3000;
 const API_HOST = Constants.expoConfig?.extra?.API_HOST || "localhost";
-//const API_BASE_URL = `http://10.95.124.171:3000/api`;
-const API_BASE_URL = `http://${API_HOST}:3000/api`;
+const API_BASE_URL = `http://${API_HOST}:${PORT}/api`;
 
 console.log("Current URL: ", API_BASE_URL)
 
@@ -57,6 +57,7 @@ export const commonAPI = {
   getDailyPasskeyGuard: () => api.get("/passkey/todayGuard"),
 }
 
+
 export const outpass = {
   getOutpasses: () => api.get("/outpass/today"),
   createOutpass: (data) => api.post("/outpass/generate", data),
@@ -73,6 +74,7 @@ export const emergencyAPI = {
 export const securityAPI = {
   validatePasskey: (data) => api.post("/security/validate", data),
   logEntry: (data) => api.post("/security/log", data),
+  getLog: (data) => api.get("/security/logs", data),
 }
 
 export default api
