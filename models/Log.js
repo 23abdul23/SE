@@ -62,4 +62,8 @@ const logSchema = new mongoose.Schema(
 logSchema.index({ userId: 1, createdAt: -1 })
 logSchema.index({ action: 1, createdAt: -1 })
 
+logSchema.statics.findAll = function (filter = {}) {
+  return this.find(filter)
+}
+
 module.exports = mongoose.model("Log", logSchema)

@@ -74,7 +74,11 @@ export const emergencyAPI = {
 export const securityAPI = {
   validatePasskey: (data) => api.post("/security/validate", data),
   logEntry: (data) => api.post("/security/log", data),
-  getLog: (data) => api.get("/security/logs", data),
+  getLogs: (params, token) =>
+    api.get("/security/logs", {
+      params,
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    }),
 }
 
 export default api

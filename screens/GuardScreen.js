@@ -110,17 +110,28 @@ export default function GuardDashboardScreen({ navigation }) {
       </View>
 
       <View style={[styles.content, localStyles.centerContent]}>
-        {/* Centered quick action card */}
+        {/* Centered quick action cards */}
         <View style={localStyles.centerRow}>
           <TouchableOpacity
             style={[localStyles.actionCard, { backgroundColor: isDarkMode ? '#e8f5e9' : '#f1f8f3' }]}
             onPress={() => navigation.navigate("Scan")}
             activeOpacity={0.8}
           >
-            <View style={[localStyles.actionIcon, { backgroundColor: isDarkMode ? '#4caf50' : '#4caf50' }]}>
+            <View style={[localStyles.actionIcon, { backgroundColor: '#4caf50' }]}>
               <Ionicons name="scan" size={24} color="#fff" />
             </View>
             <Text style={[localStyles.actionText, { color: colors.subText }]}>Scan</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[localStyles.actionCard, { backgroundColor: isDarkMode ? '#ede9fe' : '#f3e8ff' }]}
+            onPress={() => navigation.navigate("LogBook", { location: loc })}
+            activeOpacity={0.8}
+          >
+            <View style={[localStyles.actionIcon, { backgroundColor: '#7c3aed' }]}>
+              <Ionicons name="document-text" size={24} color="#fff" />
+            </View>
+            <Text style={[localStyles.actionText, { color: colors.subText }]}>Logs</Text>
           </TouchableOpacity>
         </View>
 
@@ -181,7 +192,10 @@ const localStyles = StyleSheet.create({
   centerRow: {
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: SPACING.md,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   actionCard: {
     flexDirection: 'row',
@@ -196,6 +210,8 @@ const localStyles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 6,
     elevation: 3,
+    marginHorizontal: 6,
+    marginBottom: 8,
   },
   actionIcon: {
     width: 40,

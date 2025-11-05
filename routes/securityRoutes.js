@@ -2,7 +2,7 @@ const express = require("express")
 const Passkey = require("../models/Passkey")
 const User = require("../models/User")
 const Log = require("../models/Log")
-const {authenticate} = require("../middleware/auth")
+const { authenticate } = require("../middleware/auth")
 const router = express.Router()
 
 router.post("/validate", authenticate, async (req, res) => {
@@ -87,9 +87,24 @@ router.post("/log", authenticate, async (req, res) => {
   }
 })
 
-router.get("logs" , authenticate, async (req, res) => {
-  console.log("Fetching security Logs")
-  
+router.get("/logs", authenticate, async (req, res) => {
+  try {
+    const { location } = req.query
+
+    const query = {}
+    if (location && location.trim().length > 0) {
+      query.location = location.trim()
+    }
+
+    const logs = await Log.findAll(query)
+      .sort({ createdAt: -1 })
+      .populate("userId", "name studentId role hostel roomNumber")
+
+    res.status(200).json({ logs })
+  } catch (error) {
+    console.error("Fetch security logs error:", error)
+    res.status(500).json({ message: "Server error fetching security logs" })
+  }
 })
 
 
