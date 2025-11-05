@@ -64,7 +64,7 @@ export default function PasskeyCard({ passkey, onRefresh }) {
 
       <View style={styles.passkeyContainer}>
         <Text style={styles.passkeyLabel}>Secure Code</Text>
-        <Text style={styles.passkeyCode}>{passkey.hash.substring(0, 8).toUpperCase()}</Text>
+        <Text style={styles.passkeyCode}>{passkey.hash? passkey.hash.substring(0, 8).toUpperCase() : ""}</Text>
         <Text style={styles.timeRemaining}>Expires in {getTimeRemaining()}</Text>
       </View>
 

@@ -1,0 +1,581 @@
+================================================================================
+SOFTWARE ENGINEERING (CS301)
+SOFTWARE REQUIREMENT SPECIFICATION (SRS)
+================================================================================
+
+Project Title:      Aegis ID: Your Secure Digital Campus Pass  
+Course:             Software Engineering (CS301)  
+Institute:          —  
+
+--------------------------------------------------------------------------------
+Group Members
+--------------------------------------------------------------------------------
+- Kavyan Hembrom (IIT2024245) – UI/UX Design & Wireframe Design
+- Afzal Raja (IIB2024031) – Backend Developer
+- Abdul Azeem (IIT202423) – User Schema Development
+- Khushi Shorey (IIT2024244) – Basic Backend Support
+- Vandita Jain (IIT2024228) – Frontend Developer
+- Shon Ravindra Waghchoure (IIT2024247) – Blockchain & Security
+
+Date: ___________
+
+================================================================================
+1. Introduction
+================================================================================
+
+Aegis ID is a mobile application designed to replace traditional student ID cards with a modern, secure, and highly efficient digital alternative. The app streamlines student entry and exit at campus locations (hostels, libraries, etc.), eliminating manual entries and providing secure, reliable access.
+
+--------------------------------------------------------------------------------
+1.1 Purpose
+--------------------------------------------------------------------------------
+- Create a secure, efficient, and user-friendly digital identity platform for students.
+- Address inefficiencies of manual sign-ins.
+- Reduce risks of static physical IDs.
+- Integrate emergency support within the campus ecosystem.
+
+--------------------------------------------------------------------------------
+1.2 Scope
+--------------------------------------------------------------------------------
+- **In Scope:** Digital campus ID, daily dynamic encrypted passkey generation, QR/NFC-based fast access, hostel outpass management, emergency call with location sharing.
+- **Out of Scope:** Offline operation without connectivity, direct integration with external government ID systems.
+
+--------------------------------------------------------------------------------
+1.3 Definitions, Acronyms and Abbreviations
+--------------------------------------------------------------------------------
+- SRS – Software Requirement Specification
+- JWT – JSON Web Token
+- NFC – Near Field Communication
+- SHA-256 – Secure Hash Algorithm (cryptographic hash)
+- Aegis ID – The proposed digital campus pass system
+
+--------------------------------------------------------------------------------
+1.4 References
+--------------------------------------------------------------------------------
+- IEEE SRS structure
+- Internal team notes and project proposal
+
+--------------------------------------------------------------------------------
+1.5 Overview
+--------------------------------------------------------------------------------
+This document details system features, interfaces, data design, security measures, non-functional requirements, and workflows.
+
+================================================================================
+2. Overall Description
+================================================================================
+
+--------------------------------------------------------------------------------
+2.1 Product Perspective
+--------------------------------------------------------------------------------
+- Standalone mobile-first system
+- Backend API integration
+- Campus access points (QR scanners/NFC readers)
+- Authentication services
+- Optional blockchain ledger for immutable audit logs
+
+--------------------------------------------------------------------------------
+2.2 Product Functions
+--------------------------------------------------------------------------------
+- Daily passkey generation (QR/NFC), time-based expiry
+- Secure, non-sharable passkey display (screenshot prevention, device binding)
+- Scan & Go at campus gates
+- Outpass management for hostels (request, approval, tracking)
+- Emergency services (one-tap security/ambulance, auto-location sharing)
+- Profile management for students; inventory/price management by admins (optional)
+
+--------------------------------------------------------------------------------
+2.3 User Classes and Characteristics
+--------------------------------------------------------------------------------
+- **Students:** Generate/scan passkeys, request outpass, trigger emergency assistance
+- **Wardens:** Approve/monitor outpass requests
+- **Security Staff:** Validate passkeys, receive emergency alerts
+- **Administrators:** Manage system configuration, access policies, audit logs
+
+--------------------------------------------------------------------------------
+2.4 Operating Environment
+--------------------------------------------------------------------------------
+- Mobile app: Android/iOS (React Native)
+- Backend: Node.js/Express, MongoDB/Firebase
+- NFC (where supported), QR scanning via camera
+- Secure HTTPS communication
+
+--------------------------------------------------------------------------------
+2.5 Design and Implementation Constraints
+--------------------------------------------------------------------------------
+- Campus connectivity variability (Wi-Fi/cellular)
+- NFC hardware availability differences
+- Privacy regulations for location/personal data
+- Throughput limits at peak entry times
+- Need for rate limiting and scalable infrastructure
+
+--------------------------------------------------------------------------------
+2.6 Assumptions and Dependencies
+--------------------------------------------------------------------------------
+- Students have internet-connected smartphones
+- Campus gates have QR scanners or NFC readers
+- Backend authentication and database services remain available
+
+================================================================================
+3. System Features
+================================================================================
+
+- **3.1 Daily Passkey Generation:**  
+  Unique, encrypted, time-bound passkey per user per day (QR/NFC). Non-replayable, device-bound.
+
+- **3.2 Secure Passkey (Non-Sharable):**  
+  Passkeys bound to registered device ID, protected against screenshot sharing and server-side validation.
+
+- **3.3 Scan & Go / NFC Access:**  
+  Security staff scan QR code or accept NFC tap. Backend validates token authenticity, device binding, expiry.
+
+- **3.4 Outpass Management (Hostels):**  
+  Students request outpass (date, time, reason). Wardens approve/reject; decisions logged. Safety focus for female students, extensible to all hostels.
+
+- **3.5 Emergency Services:**  
+  One-tap emergency calls to campus security/ambulance. App shares GPS coordinates, logs incident lifecycle.
+
+- **3.6 Profile Management:**  
+  Students view/update profile info. Admins manage role assignments.
+
+================================================================================
+4. External Interface Requirements
+================================================================================
+
+--------------------------------------------------------------------------------
+4.1 User Interfaces
+--------------------------------------------------------------------------------
+- Login/Registration: Email/Student ID, password
+- Dashboard: Generate Passkey, Scan QR, Request Outpass, Emergency Help
+- QR/NFC Passkey: Dynamic QR display, countdown/expiry indicator
+- Outpass Request: Form (date, time, reason), status tracking
+- Emergency: Call security/ambulance, show location
+- Profile: View/edit details, device binding info
+
+--------------------------------------------------------------------------------
+4.2 Hardware Interfaces
+--------------------------------------------------------------------------------
+- NFC readers, camera-based QR scanners at gates
+- Mobile device camera and NFC chip for students
+
+--------------------------------------------------------------------------------
+4.3 Software Interfaces
+--------------------------------------------------------------------------------
+- Mobile app (React Native) ↔ RESTful APIs (Express.js) ↔ MongoDB/Firebase
+- Optional SMS/notification services for alerts
+
+--------------------------------------------------------------------------------
+4.4 Communications Interfaces
+--------------------------------------------------------------------------------
+- HTTPS over TLS 1.2+
+- JWT for request authorization
+- Structured JSON payloads
+
+================================================================================
+5. Non-Functional Requirements
+================================================================================
+
+- **Security:** JWT auth, bcrypt for passwords, SHA-256 for token derivation, role-based access, device binding, rate limiting, audit logs
+- **Performance:** Gate validation under 300 ms p95, scalable caching, horizontal scaling
+- **Availability:** 99.5%+ during term time, graceful degradation (fallback QR if NFC unavailable)
+- **Usability:** Simple, accessible UI, clear states, offline-friendly screens
+- **Maintainability:** Modular services, documented APIs, CI/CD pipelines
+- **Privacy:** Minimal data retention, explicit consent for location sharing, encryption at rest & in transit
+
+================================================================================
+6. System Architecture & Technology Stack
+================================================================================
+
+- Mobile: React Native (iOS/Android)
+- Backend: Node.js + Express
+- Database: MongoDB; optional Firebase (Firestore/Auth)
+- Security: JWT, SHA-256, bcrypt, CORS, input validation, rate limiting
+- Hardware Integration: NFC libraries, QR scanner library
+
+================================================================================
+7. Database Design & Schema Description
+================================================================================
+
+--------------------------------------------------------------------------------
+7.1 Collections
+--------------------------------------------------------------------------------
+- **Students:** See Appendix C for schema.
+- **Passkeys:** See Appendix C for schema.
+- **OutpassRequests:** See Appendix C for schema.
+- **EmergencyLogs:** See Appendix C for schema.
+- **BlockchainLogs (Optional):** See Appendix C for schema.
+
+--------------------------------------------------------------------------------
+7.2 Relationships
+--------------------------------------------------------------------------------
+- Student ↔ Passkeys: One-to-Many (1:M)
+- Student ↔ Outpass Requests: One-to-Many (1:M)
+- Student ↔ Emergency Logs: One-to-Many (1:M)
+- Student ↔ Blockchain Logs: One-to-Many (1:M)
+
+================================================================================
+8. API Structure
+================================================================================
+
+--------------------------------------------------------------------------------
+8.1 Route Structure & Endpoints
+--------------------------------------------------------------------------------
+
+The backend is organized into modular Express.js route files, each handling a specific domain:
+
+- **authRoutes.js**  
+  Handles user authentication (register, login, logout, token refresh).
+
+- **studentRoutes.js**  
+  Manages student-specific actions (profile, passkey generation, outpass requests).
+
+- **adminRoutes.js**  
+  Provides administrative controls (user management, audit logs, system settings).
+
+- **securityRoutes.js**  
+  Used by campus security staff for passkey validation, emergency alerts, and access logs.
+
+- **passkeyRoutes.js**  
+  Endpoints for generating, validating, and revoking passkeys.
+
+- **outpassRoutes.js**  
+  Handles outpass request submission, approval/rejection, and status tracking.
+
+- **emergencyRoutes.js**  
+  Manages emergency alert creation, status updates, and responder actions.
+
+Each route file imports relevant middleware for authentication, authorization, and business logic enforcement.  
+All endpoints follow RESTful conventions and return structured JSON responses.
+
+- **Authentication**
+  - POST /api/auth/register – create account
+  - POST /api/auth/login – authenticate, return JWT
+  - POST /api/auth/refresh – refresh token
+
+- **Passkeys**
+  - POST /api/passkey/generate – create daily key
+  - POST /api/passkey/validate – validate scanned key
+  - POST /api/passkey/revoke – revoke key before expiry
+
+- **Outpass**
+  - POST /api/outpass/create – submit request
+  - GET /api/outpass/status/:id – check status
+  - POST /api/outpass/approve – warden decision
+
+- **Emergency**
+  - POST /api/emergency/alert – create incident log & notify
+  - GET /api/emergency/:id – incident status
+
+- **Profile**
+  - GET /api/profile – view
+  - PUT /api/profile – update
+
+
+================================================================================
+9. System Integration & Workflows
+================================================================================
+
+- **Outpass Request Workflow:**  
+  Student submits form → API validates & stores as Pending → Warden notified → Approve/Reject → Status updated → Student notified.
+
+- **QR/NFC Passkey Generation & Validation:**  
+  Student taps Generate → Backend creates unique token with expiry → Display as QR/NFC → Security scans → Backend validates device binding & expiry → Grant/Deny → Log attempt.
+
+- **Emergency Response Workflow:**  
+  Student triggers emergency → App captures GPS → Alert sent to security/ambulance with location → Incident logged → Status updates until resolution.
+
+================================================================================
+10. Roles and Responsibilities
+================================================================================
+
+- Kavyan Hembrom (IIT2024245): UI/UX Design & Wireframe Design, Figma wireframes/prototypes, navigation, accessible UI
+- Afzal Raja (IIB2024031): Backend Developer, Node.js/Express APIs, MongoDB, JWT auth, passkey services
+- Abdul Azeem (IIT202423): User Schema Development, MongoDB schemas/relations, query/index optimization
+- Khushi Shorey (IIT2024244): Basic Backend Support, secondary APIs (emergency, logging), endpoint testing, Firebase Auth support
+- Vandita Jain (IIT2024228): Frontend Developer, React Native screens/navigation, API integration
+- Shon Ravindra Waghchoure (IIT2024247): Blockchain & Security, blockchain logging, cryptographic mechanisms, secure credential storage/transfer
+
+================================================================================
+11. Security Measures
+================================================================================
+
+- JWT-based authorization; short-lived tokens with refresh flow
+- Bcrypt for password hashing; strong password policy
+- SHA-256 for key derivation; device binding
+- HTTPS transport security; CORS, input validation
+- Rate limiting, IP throttling
+- Audit/access logs; optional blockchain-based immutable logging
+- PII minimization; encryption at rest and in transit
+
+================================================================================
+12. Use Cases (Descriptive)
+================================================================================
+
+- **UC-01 Generate Passkey**
+  - Actor: Student
+  - Precondition: Authenticated; device registered
+  - Main Flow: Student taps Generate → System creates time-bound token → Display QR/NFC
+  - Postcondition: Passkey active until expiry or revoke
+
+- **UC-02 Validate Passkey at Gate**
+  - Actor: Security Staff
+  - Precondition: Passkey valid; network available
+  - Main Flow: Scan QR / read NFC → Server validates → Show result
+  - Alternate: Token expired/device mismatch → Deny access; log incident
+
+- **UC-03 Request Outpass**
+  - Actor: Student
+  - Main Flow: Fill form → Submit → Status Pending → Warden Approves/Rejects → Student notified
+
+- **UC-04 Emergency Alert**
+  - Actor: Student/Security
+  - Main Flow: Tap emergency → GPS captured → Alerts sent → Responders track status
+
+
+================================================================================
+13. Frontend Design Layout & Tools
+================================================================================
+
+- Primary Framework: React Native
+- Design Tool: Figma
+- Login/Registration: Email/Student ID & Password
+- Dashboard: Generate Passkey, Scan QR, Request Outpass, Emergency Help
+- QR/NFC Passkey: Dynamic code with expiry timer
+- Outpass Request: Date, time, reason; submit & status view
+- Emergency: Call Security/Ambulance; auto-location sharing
+- Profile: Student details; edit/account settings
+- Navigation Flow: Login → Dashboard → (Profile / Outpass / Passkey / Emergency)
+
+--------------------------------------------------------------------------------
+13.1 Component Library
+--------------------------------------------------------------------------------
+
+Reusable React Native components used throughout the application:
+
+- **EmergencyButton.js**  
+  Button for triggering emergency actions (calls, alerts).
+
+- **FilterTabs.js**  
+  Tabbed navigation for filtering lists or views (e.g., outpass status, room types).
+
+- **LoadingSpinner.js**  
+  Animated spinner for indicating loading states.
+
+- **LocationCard.js**  
+  Card displaying location details, used for rooms, hostels, or emergency location info.
+
+- **OutpassCard.js**  
+  Card summarizing outpass requests, status, and actions.
+
+- **PasskeyCard.js**  
+  Card for displaying the current passkey (QR/NFC), expiry, and device binding info.
+
+- **QuickStatsCard.js**  
+  Card showing quick statistics (e.g., seat availability, issued books, user stats).
+
+- **RoomCard.js**  
+  Card for displaying room information, occupancy, and related actions.
+
+These components promote modularity, code reuse, and consistent UI/UX across screens.
+
+
+--------------------------------------------------------------------------------
+13.2 Context Providers
+--------------------------------------------------------------------------------
+
+Global React Context modules for state management:
+
+- **AuthContext.js**  
+  Provides authentication state, user info, and login/logout actions to all screens.
+
+- **ThemeContext.js**  
+  Manages dark/light theme state and color palette, allowing dynamic UI theming.
+
+
+--------------------------------------------------------------------------------
+13.3 Screen Structure & Navigation
+--------------------------------------------------------------------------------
+
+The application is organized into the following screens, each serving a distinct function:
+
+- **LoginScreen.js**  
+  Allows users to authenticate using Student ID and password.
+
+- **RegisterScreen.js**  
+  Enables new users to create an account by providing required details.
+
+- **DashboardScreen.js**  
+  Main hub after login; provides access to passkey generation, outpass requests, emergency help, and quick stats.
+
+- **ProfileScreen.js**  
+  Displays and allows editing of user profile information and device binding.
+
+- **LibraryScreen.js**  
+  Shows library statistics, seat availability, issued books, and user’s seat/token info.
+
+- **CreateOutpassScreen.js**  
+  Form for students to request an outpass, specifying date, time, and reason.
+
+- **OutpassScreen.js**  
+  Lists all outpass requests, their statuses, and actions for approval/rejection.
+
+- **EmergencyScreen.js**  
+  Provides emergency call options, location sharing, and incident status.
+
+- **LoadingScreen.js**  
+  Displays a loading spinner during data fetches or transitions.
+
+- **ScannerScreen.js**  
+  Enables QR code scanning for passkey validation at campus gates.
+
+- **SACScreen.js**  
+  Displays Student Activity Center information, events, and access controls.
+
+Each screen is linked via React Navigation, ensuring a smooth user flow from login to dashboard and all feature modules.
+
+================================================================================
+14. Backend Design & Tools
+================================================================================
+
+
+--------------------------------------------------------------------------------
+14.1 Middleware Modules
+--------------------------------------------------------------------------------
+
+Express.js middleware functions for request validation and access control:
+
+- **auth.js**  
+  Verifies JWT tokens, authenticates users, and attaches user info to requests.
+
+- **adminAuth.js**  
+  Restricts access to admin-only routes, checks user role for administrative privileges.
+
+- **outpassExpiry.js**  
+  Checks outpass request expiry, prevents actions on expired requests.
+
+
+- Runtime: Node.js
+- Framework: Express.js
+- Database: MongoDB
+- Auth: JWT
+- Optional: Firebase & Blockchain layer
+
+**Authentication Process:**
+- User enters Student ID + Password
+- Server verifies credentials (MongoDB/Firebase Auth)
+- On success, generates short-lived JWT and returns to client
+- Subsequent requests include JWT in Authorization header
+
+================================================================================
+15. Data Flow Architecture
+================================================================================
+
+Mobile App (React Native)  
+↓ HTTP(S) REST APIs  
+↓ Express.js Server  
+↓ MongoDB Database  
+↓ Optional Blockchain Logging
+
+Notifications to wardens/security via push/SMS as applicable. Audit logs retained per policy.
+
+================================================================================
+16. Validation & Logging
+================================================================================
+
+All critical events (access attempts, approvals, emergency alerts) are logged with timestamps and actor IDs. Validation includes token freshness, device ID match, and role-based permissions.
+
+================================================================================
+17. Constraints & Risks
+================================================================================
+
+- Device loss/theft: mitigated via re-binding and remote revoke
+- Connectivity outages: mitigated via retries and local caching of QR display (server-side validation authoritative)
+- Privacy concerns: addressed by minimization and explicit consent for location sharing
+
+================================================================================
+18. Appendix A – Sample Data Objects
+================================================================================
+
+- Student: { student_id, name, email, hostel_id, device_id }
+- Passkey: { passkey_id, student_id, date, encrypted_key, expiry_time }
+- OutpassRequest: { request_id, student_id, reason, date, time, status, warden_id }
+- EmergencyLog: { emergency_id, student_id, type, timestamp, location, status, description }
+
+================================================================================
+19. Appendix B – Glossary
+================================================================================
+
+- Device Binding – Association of user account with a specific device ID to prevent sharing
+- Immutable Log – Tamper-evident record; optionally kept on blockchain
+- Passkey – Time-bound token representing digital campus access for the user
+
+================================================================================
+19. Appendix C – Model Schemas
+================================================================================
+
+**User.js**
+```javascript
+const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  studentId: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  passwordHash: { type: String, required: true },
+  hostelId: { type: String },
+  deviceId: { type: String },
+  role: { type: String, enum: ['student', 'warden', 'security', 'admin'], default: 'student' }
+});
+```
+
+**Passkey.js**
+```javascript
+const PasskeySchema = new mongoose.Schema({
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  encryptedKey: { type: String, required: true },
+  date: { type: Date, required: true },
+  expiryTime: { type: Date, required: true },
+  deviceId: { type: String, required: true }
+});
+```
+
+**Outpass.js**
+```javascript
+const OutpassSchema = new mongoose.Schema({
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  reason: { type: String, required: true },
+  date: { type: Date, required: true },
+  time: { type: String, required: true },
+  status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+  wardenId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+```
+
+**Emergency.js**
+```javascript
+const EmergencySchema = new mongoose.Schema({
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  type: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now },
+  location: { type: String },
+  status: { type: String, enum: ['active', 'resolved'], default: 'active' },
+  description: { type: String }
+});
+```
+
+**Log.js**
+```javascript
+const LogSchema = new mongoose.Schema({
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  eventType: { type: String, required: true },
+  hash: { type: String },
+  timestamp: { type: Date, default: Date.now },
+  previousHash: { type: String }
+});
+```
+
+================================================================================
+20. Approval & Sign-off
+================================================================================
+
+Prepared by: ____________________  
+Reviewed by: ____________________  
+Approved by: ____________________

@@ -1,5 +1,7 @@
 const { verifyToken } = require("../config/jwt")
 const User = require("../models/User")
+const GuardUser = require("../models/GuardUser")
+const WardenUser = require("../models/WardenUser")
 
 const authenticate = async (req, res, next) => {
   try {
@@ -10,15 +12,31 @@ const authenticate = async (req, res, next) => {
     }
 
     const decoded = verifyToken(token)
-    const user = await User.findById(decoded.id).select("-password")
 
-    if (!user || !user.isActive) {
+    let user
+    switch (decoded.role) {
+      case "security":
+        user = await GuardUser.findById(decoded.userId).select("-password")
+        break
+      case "warden":
+        user = await WardenUser.findById(decoded.userId).select("-password")
+        break
+      default:
+        user = await User.findById(decoded.userId).select("-password")
+        break
+    }
+
+    if (!user || (typeof user.isActive === "boolean" && !user.isActive)) {
       return res.status(401).json({ message: "Invalid token or user not found." })
     }
 
-    req.user = user
+    req.user = {
+      ...user.toObject(),
+      role: decoded.role || user.role,
+    }
     next()
   } catch (error) {
+    console.error("Authentication error:", error)
     res.status(401).json({ message: "Invalid token." })
   }
 }

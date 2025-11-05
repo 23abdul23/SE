@@ -23,25 +23,13 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["student", "warden", "security"],
-      default: "student",
+      default: "warden",
     },
     gender: {
       type: String,
       enum: ["male", "female", "other"],      
     },
-    department: {
-      type: String,
-      enum: ["IT", "IT BI","Electronics"],
-    },
-    year: {
-      type: String,
-      enum: ["1st Year", "2nd Year", "3rd Year", "4th Year"],
-    },
     hostel: {
-      type: String,
-      trim: true,
-    },
-    roomNumber: {
       type: String,
       trim: true,
     },
@@ -49,15 +37,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    emergencyContact: {
+    profilePhoto: {
       type: String,
       trim: true,
     },
-    studentId: {
-      type: String,
-      sparse: true,
-      unique: true,
-    },
+    // deviceId: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
     isActive: {
       type: Boolean,
       default: true,
@@ -68,4 +56,5 @@ const userSchema = new mongoose.Schema(
   },
 )
 
-module.exports = mongoose.model("User", userSchema)
+
+module.exports = mongoose.model("WardenUser", userSchema)

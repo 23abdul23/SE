@@ -2,7 +2,7 @@ const express = require("express")
 const Passkey = require("../models/Passkey")
 const User = require("../models/User")
 const Log = require("../models/Log")
-const {authenticate} = require("../middleware/auth")
+const { authenticate } = require("../middleware/auth")
 const router = express.Router()
 
 router.post("/validate", authenticate, async (req, res) => {
@@ -52,26 +52,60 @@ router.post("/validate", authenticate, async (req, res) => {
 
 router.post("/log", authenticate, async (req, res) => {
   try {
-    const { action, location, details } = req.body
+    let { action, location , guardId, guardName} = req.body
+
+    const totalLogs = await Log.countDocuments()
+    
+    if (totalLogs > 0){
+      const entryLog = await Log.findOne({ userId : req.user._id}).sort({ timestamp: -1 })
+
+      if (entryLog && entryLog.action == "entry"){
+          action = "exit"
+      }
+    }
 
     const log = new Log({
-      userId: req.user.userId,
+      userId: req.user._id,
       action,
       location,
-      details,
+      guardId,
+      guardName,
       timestamp: new Date(),
     })
 
     await log.save()
 
-    res.json({
+
+    res.status(200).json({
       message: "Security log created successfully",
       log,
     })
+
   } catch (error) {
     console.error("Security log error:", error)
     res.status(500).json({ message: "Server error creating security log" })
   }
 })
+
+router.get("/logs", authenticate, async (req, res) => {
+  try {
+    const { location } = req.query
+
+    const query = {}
+    if (location && location.trim().length > 0) {
+      query.location = location.trim()
+    }
+
+    const logs = await Log.findAll(query)
+      .sort({ createdAt: -1 })
+      .populate("userId", "name studentId role hostel roomNumber")
+
+    res.status(200).json({ logs })
+  } catch (error) {
+    console.error("Fetch security logs error:", error)
+    res.status(500).json({ message: "Server error fetching security logs" })
+  }
+})
+
 
 module.exports = router

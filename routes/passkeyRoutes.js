@@ -1,9 +1,10 @@
 const express = require("express")
 const Passkey = require("../models/Passkey")
 const User = require("../models/User")
+const GuardUser = require("../models/GuardUser")
 const Log = require("../models/Log")
 const { authenticate } = require("../middleware/auth");
-const { generateDailyHash } = require("../utils/hashGenerator")
+const { generatePasskeyHash } = require("../utils/hashGenerator")
 const router = express.Router()
 
 // Get today's passkey for authenticate user
@@ -15,19 +16,26 @@ router.get("/today", authenticate, async (req, res) => {
     const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 1)
 
+    // Delete all previous passkeys for this user except today's
+    await Passkey.deleteMany({
+      userId: req.user._id,
+      createdAt: { $lt: today }
+    })
+    
     let passkey = await Passkey.findOne({
-      userId: req.user.userId,
+      userId: req.user._id,
       createdAt: { $gte: today, $lt: tomorrow },
     })
 
     if (!passkey) {
       // Generate new passkey for today
-      const user = await User.findById(req.user.userId)
-      const hash = generateDailyHash(user.studentId, today)
+      const user = await User.findOne({studentId : req.user.studentId})
+      const hash = generatePasskeyHash(user.studentId, user.deviceId, today)
 
       passkey = new Passkey({
-        userId: req.user.userId,
+        userId: req.user._id,
         hash,
+        date : new Date(),
         expiresAt: tomorrow,
       })
 
@@ -43,11 +51,79 @@ router.get("/today", authenticate, async (req, res) => {
         isActive: passkey.isActive,
       },
     })
+
   } catch (error) {
-    console.error("Passkey fetch error:", error)
-    res.status(500).json({ message: "Server error fetching passkey" })
+
+    if (error.code === 11000) {
+    console.error("Duplicate hash detected:", error.keyValue.hash);
+    // Decide: skip, regenerate new hash, or update existing passkey
+    } else {
+      console.error("Passkey fetch error:", error)
+      res.status(500).json({ message: "Server error fetching passkey" })
+    }
   }
 })
+
+router.get("/todayGuard", authenticate, async (req, res) => {
+  try {
+
+    console.log("Entered here")
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    // Delete all previous passkeys for this user except today's
+    await Passkey.deleteMany({
+      userId: req.user._id,
+      createdAt: { $lt: today }
+    })
+    
+    let passkey = await Passkey.findOne({
+      userId: req.user._id,
+      createdAt: { $gte: today, $lt: tomorrow },
+    })
+
+    console.log(req.user)
+
+    if (!passkey) {
+      // Generate new passkey for today
+      const user = await GuardUser.findOne({guardId : req.user.guardId})
+      const hash = generatePasskeyHash(user.guardId, user.deviceId, today)
+
+      passkey = new Passkey({
+        userId: req.user._id,
+        hash,
+        date : new Date(),
+        expiresAt: tomorrow,
+      })
+
+      await passkey.save()
+    }
+
+    res.json({
+      passkey: {
+        id: passkey._id,
+        hash: passkey.hash,
+        createdAt: passkey.createdAt,
+        expiresAt: passkey.expiresAt,
+        isActive: passkey.isActive,
+      },
+    })
+
+  } catch (error) {
+
+    if (error.code === 11000) {
+    console.error("Duplicate hash detected:", error.keyValue.hash);
+    // Decide: skip, regenerate new hash, or update existing passkey
+    } else {
+      console.error("Passkey fetch error:", error)
+      res.status(500).json({ message: "Server error fetching passkey" })
+    }
+  }
+})
+
 
 // Validate passkey (for security guards)
 router.post("/validate", authenticate, async (req, res) => {

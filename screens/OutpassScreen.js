@@ -1,16 +1,21 @@
 "use client"
 
-import { View, Text, StyleSheet, TouchableOpacity, RefreshControl, Alert, FlatList } from "react-native"
+import { View, Text, TouchableOpacity, RefreshControl, Alert, FlatList } from "react-native"
 import { useState, useEffect } from "react"
 import { Ionicons } from "@expo/vector-icons"
+import { useTheme } from "../context/ThemeContext"
 import { useNavigation } from "@react-navigation/native"
-import { studentAPI } from "../services/api"
-import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
+import { outpass } from "../services/api"
+import { COLORS } from "../utils/constants"
+
+import styles from "../styles/OutpassStyles"
+
 import LoadingSpinner from "../components/LoadingSpinner"
 import OutpassCard from "../components/OutpassCard"
 import FilterTabs from "../components/FilterTabs"
 
 export default function OutpassScreen() {
+  const { isDarkMode, toggleTheme, colors } = useTheme()
   const navigation = useNavigation()
   const [outpasses, setOutpasses] = useState([])
   const [filteredOutpasses, setFilteredOutpasses] = useState([])
@@ -36,8 +41,16 @@ export default function OutpassScreen() {
 
   const loadOutpasses = async () => {
     try {
-      const response = await studentAPI.getOutpasses()
-      setOutpasses(response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
+      const response = await outpass.getOutpasses()
+
+      // ✅ Handle "today" route returning a single object
+      if (response.data.outpass) {
+        setOutpasses([response.data.outpass]) // wrap in array
+      } else if (Array.isArray(response.data)) {
+        setOutpasses(response.data) // history route case
+      } else {
+        setOutpasses([])
+      }
     } catch (error) {
       console.log("Outpass load error:", error)
       Alert.alert("Error", "Failed to load outpasses")
@@ -94,12 +107,22 @@ export default function OutpassScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Outpass Management</Text>
-        <TouchableOpacity style={styles.addButton} onPress={handleCreateOutpass}>
-          <Ionicons name="add" size={24} color={COLORS.white} />
-        </TouchableOpacity>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: colors.card, flexDirection: "row", alignItems: "center", justifyContent: "center" },
+        ]}
+      >
+        <View style={{ flex: 1 }} />
+        <Text style={[styles.headerTitle, { color: colors.text, textAlign: "center", flex: 2 }]}>
+          Outpass Management
+        </Text>
+        <View style={{ flex: 1, alignItems: "flex-end" }}>
+          <TouchableOpacity onPress={toggleTheme} style={{ padding: 8 }}>
+            <Ionicons name={isDarkMode ? "sunny" : "moon"} size={24} color={colors.text} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FilterTabs options={filterOptions} activeFilter={activeFilter} onFilterChange={setActiveFilter} />
@@ -116,70 +139,3 @@ export default function OutpassScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: SPACING.lg,
-    paddingTop: 50,
-    paddingBottom: SPACING.md,
-    backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray[200],
-  },
-  headerTitle: {
-    fontSize: SIZES.xl,
-    fontFamily: FONTS.bold,
-    color: COLORS.gray[800],
-  },
-  addButton: {
-    backgroundColor: COLORS.primary,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listContainer: {
-    padding: SPACING.lg,
-    flexGrow: 1,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: SPACING.xxl,
-  },
-  emptyTitle: {
-    fontSize: SIZES.lg,
-    fontFamily: FONTS.bold,
-    color: COLORS.gray[800],
-    marginTop: SPACING.md,
-    marginBottom: SPACING.xs,
-  },
-  emptyText: {
-    fontSize: SIZES.md,
-    fontFamily: FONTS.regular,
-    color: COLORS.gray[600],
-    textAlign: "center",
-    marginBottom: SPACING.lg,
-    maxWidth: 250,
-  },
-  createButton: {
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderRadius: 8,
-  },
-  createButtonText: {
-    fontSize: SIZES.md,
-    fontFamily: FONTS.bold,
-    color: COLORS.white,
-  },
-})

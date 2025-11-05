@@ -9,13 +9,21 @@ const logSchema = new mongoose.Schema(
     },
     action: {
       type: String,
-      enum: ["entry", "exit", "scan_attempt", "outpass_request", "emergency_alert"],
+      enum: ["entry", "exit", "scan_attempt", "outpass_request","outpass_generated", "emergency_alert"],
       required: true,
     },
     location: {
       type: String,
       trim: true,
     },
+    guardId: {
+      type: String,
+      trim: true,
+    },
+    guardName: {
+      type: String,
+      trim: true,
+    },  
     deviceInfo: {
       type: String,
       trim: true,
@@ -42,6 +50,7 @@ const logSchema = new mongoose.Schema(
     scanType: {
       type: String,
       enum: ["qr", "nfc", "manual"],
+      default: "qr",
     },
   },
   {
@@ -52,5 +61,9 @@ const logSchema = new mongoose.Schema(
 // Index for efficient queries
 logSchema.index({ userId: 1, createdAt: -1 })
 logSchema.index({ action: 1, createdAt: -1 })
+
+logSchema.statics.findAll = function (filter = {}) {
+  return this.find(filter)
+}
 
 module.exports = mongoose.model("Log", logSchema)

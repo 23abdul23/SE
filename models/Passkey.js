@@ -33,6 +33,6 @@ const passkeySchema = new mongoose.Schema(
 
 // Index for efficient queries
 passkeySchema.index({ userId: 1, date: 1 })
-passkeySchema.index({ hash: 1 })
+//  passkeySchema.index({ hash: 1 })
 
 module.exports = mongoose.model("Passkey", passkeySchema)

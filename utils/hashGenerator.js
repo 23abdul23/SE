@@ -21,6 +21,8 @@ const generateDailyPasskeys = async () => {
       isActive: true,
     }).select("_id deviceId")
 
+    
+
     const passkeyPromises = students.map(async (student) => {
       const hash = generatePasskeyHash(student._id, student.deviceId, today)
 
