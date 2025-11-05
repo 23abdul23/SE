@@ -62,6 +62,7 @@ export const outpass = {
   getOutpasses: () => api.get("/outpass/today"),
   createOutpass: (data) => api.post("/outpass/generate", data),
   updateOutpass: (id, data) => api.put(`/outpass/${id}`, data),
+  getHistory: (params) => api.get("/outpass/history", { params }),
 }
 
 // Emergency API endpoints
