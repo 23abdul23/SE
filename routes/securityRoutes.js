@@ -86,8 +86,8 @@ router.post("/log", authenticate, async (req, res) => {
   }
 });
 
-router.get("logs" , authenticate, async (req, res) => {
-  console.log("Fetching security Logs");
+router.get("/logs" , authenticate, async (req, res) => {
+  console.log("Fetching security Logs")
   
 });
 

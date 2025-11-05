@@ -4,5 +4,5 @@ dork mode at login screen should be in the corner
 
 backend Issue:
 outpass get's created automatically, without the warden's approval
-profile is not editable
+logs are not being shhown on the guard dashboard 
 
