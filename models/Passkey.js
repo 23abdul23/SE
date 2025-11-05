@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
 const passkeySchema = new mongoose.Schema(
   {
@@ -29,10 +29,10 @@ const passkeySchema = new mongoose.Schema(
   {
     timestamps: true,
   },
-)
+);
 
 // Index for efficient queries
-passkeySchema.index({ userId: 1, date: 1 })
+passkeySchema.index({ userId: 1, date: 1 });
 //  passkeySchema.index({ hash: 1 })
 
-module.exports = mongoose.model("Passkey", passkeySchema)
+export default mongoose.model("Passkey", passkeySchema);

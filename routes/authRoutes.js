@@ -1,11 +1,11 @@
-const express = require("express")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const User = require("../models/User")
-const WardenUser = require("../models/WardenUser")
-const GuardUser = require("../models/GuardUser")
-const { authenticate } = require("../middleware/auth");
-const router = express.Router()
+import express from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import WardenUser from "../models/WardenUser.js";
+import GuardUser from "../models/GuardUser.js";
+import { authenticate } from "../middleware/auth.js";
+const router = express.Router();
 
 // Register new user
 router.post("/register", async (req, res) => {
@@ -244,4 +244,4 @@ router.get("/fetchProfile", async (req, res) => {
   }
 });
 
-module.exports = router
+export default router;

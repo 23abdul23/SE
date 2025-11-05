@@ -1,12 +1,11 @@
-const { CaseUpper } = require('lucide-react');
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const LocationSchema = new mongoose.Schema({
   name: { 
-    type: String, required: true, unique: true, CaseUpper : true 
+    type: String, required: true, unique: true, caseUpper : true 
   },
   code: { 
-    type: String, required: true, unique: true, CaseUpper : true 
+    type: String, required: true, unique: true, caseUpper : true 
   },
   hash: { 
     type: String, required: true, unique: true 
@@ -16,4 +15,4 @@ const LocationSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Location', LocationSchema);
+export default mongoose.model('Location', LocationSchema);

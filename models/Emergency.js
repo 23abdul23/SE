@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
 const emergencySchema = new mongoose.Schema(
   {
@@ -68,4 +68,4 @@ emergencySchema.index({ status: 1, priority: 1 })
 emergencySchema.index({ userId: 1 })
 emergencySchema.index({ createdAt: -1 })
 
-module.exports = mongoose.model("Emergency", emergencySchema)
+export default mongoose.model("Emergency", emergencySchema)

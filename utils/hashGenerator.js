@@ -1,30 +1,30 @@
-const crypto = require("crypto")
-const User = require("../models/User")
-const Passkey = require("../models/Passkey")
+import crypto from "crypto";
+import User from "../models/User.js";
+import Passkey from "../models/Passkey.js";
 
-const generatePasskeyHash = (userId, deviceId, date) => {
-  const dateString = date.toISOString().split("T")[0] // YYYY-MM-DD format
-  const data = `${userId}${deviceId}${dateString}`
-  return crypto.createHash("sha256").update(data).digest("hex")
-}
+export const generatePasskeyHash = (userId, deviceId, date) => {
+  const dateString = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+  const data = `${userId}${deviceId}${dateString}`;
+  return crypto.createHash("sha256").update(data).digest("hex");
+};
 
-const generateDailyPasskeys = async () => {
+export const generateDailyPasskeys = async () => {
   try {
-    const today = new Date()
-    const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    tomorrow.setHours(0, 0, 0, 0)
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
 
     // Get all active students
     const students = await User.find({
       role: "student",
       isActive: true,
-    }).select("_id deviceId")
+    }).select("_id deviceId");
 
     
 
     const passkeyPromises = students.map(async (student) => {
-      const hash = generatePasskeyHash(student._id, student.deviceId, today)
+      const hash = generatePasskeyHash(student._id, student.deviceId, today);
 
       // Check if passkey already exists for today
       const existingPasskey = await Passkey.findOne({
@@ -33,7 +33,7 @@ const generateDailyPasskeys = async () => {
           $gte: new Date(today.setHours(0, 0, 0, 0)),
           $lt: new Date(today.setHours(23, 59, 59, 999)),
         },
-      })
+      });
 
       if (!existingPasskey) {
         return Passkey.create({
@@ -41,21 +41,21 @@ const generateDailyPasskeys = async () => {
           hash,
           date: today,
           expiresAt: tomorrow,
-        })
+        });
       }
-    })
+    });
 
-    await Promise.all(passkeyPromises)
-    console.log(`Generated passkeys for ${students.length} students`)
+    await Promise.all(passkeyPromises);
+    console.log(`Generated passkeys for ${students.length} students`);
   } catch (error) {
-    console.error("Error in generateDailyPasskeys:", error)
-    throw error
+    console.error("Error in generateDailyPasskeys:", error);
+    throw error;
   }
-}
+};
 
-const validatePasskey = async (hash, userId) => {
+export const validatePasskey = async (hash, userId) => {
   try {
-    const today = new Date()
+    const today = new Date();
     const passkey = await Passkey.findOne({
       hash,
       userId,
@@ -64,17 +64,11 @@ const validatePasskey = async (hash, userId) => {
         $lt: new Date(today.setHours(23, 59, 59, 999)),
       },
       expiresAt: { $gt: new Date() },
-    })
+    });
 
-    return !!passkey
+    return !!passkey;
   } catch (error) {
-    console.error("Error validating passkey:", error)
-    return false
+    console.error("Error validating passkey:", error);
+    return false;
   }
-}
-
-module.exports = {
-  generatePasskeyHash,
-  generateDailyPasskeys,
-  validatePasskey,
-}
+};

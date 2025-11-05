@@ -1,27 +1,27 @@
-const express = require("express")
-const Passkey = require("../models/Passkey")
-const User = require("../models/User")
-const Log = require("../models/Log")
-const {authenticate} = require("../middleware/auth")
-const router = express.Router()
+import express from "express";
+import Passkey from "../models/Passkey.js";
+import User from "../models/User.js";
+import Log from "../models/Log.js";
+import { authenticate } from "../middleware/auth.js";
+const router = express.Router();
 
 router.post("/validate", authenticate, async (req, res) => {
   try {
-    const { hash, location } = req.body
+    const { hash, location } = req.body;
 
     // Find the passkey
     const passkey = await Passkey.findOne({ hash, isActive: true }).populate(
       "userId",
       "name studentId hostel roomNumber",
-    )
+    );
 
     if (!passkey) {
-      return res.status(400).json({ message: "Invalid or expired passkey" })
+      return res.status(400).json({ message: "Invalid or expired passkey" });
     }
 
     // Check if passkey is still valid (not expired)
     if (new Date() > passkey.expiresAt) {
-      return res.status(400).json({ message: "Passkey has expired" })
+      return res.status(400).json({ message: "Passkey has expired" });
     }
 
     // Log the entry/exit
@@ -31,8 +31,8 @@ router.post("/validate", authenticate, async (req, res) => {
       location,
       timestamp: new Date(),
       details: `Passkey validated at ${location}`,
-    })
-    await log.save()
+    });
+    await log.save();
 
     res.json({
       message: "Passkey validated successfully",
@@ -43,24 +43,24 @@ router.post("/validate", authenticate, async (req, res) => {
         roomNumber: passkey.userId.roomNumber,
       },
       timestamp: new Date(),
-    })
+    });
   } catch (error) {
-    console.error("Passkey validation error:", error)
-    res.status(500).json({ message: "Server error validating passkey" })
+    console.error("Passkey validation error:", error);
+    res.status(500).json({ message: "Server error validating passkey" });
   }
-})
+});
 
 router.post("/log", authenticate, async (req, res) => {
   try {
-    let { action, location , guardId, guardName} = req.body
+    let { action, location , guardId, guardName} = req.body;
 
-    const totalLogs = await Log.countDocuments()
+    const totalLogs = await Log.countDocuments();
     
     if (totalLogs > 0){
-      const entryLog = await Log.findOne({ userId : req.user._id}).sort({ timestamp: -1 })
+      const entryLog = await Log.findOne({ userId : req.user._id}).sort({ timestamp: -1 });
 
       if (entryLog && entryLog.action == "entry"){
-          action = "exit"
+          action = "exit";
       }
     }
 
@@ -71,26 +71,24 @@ router.post("/log", authenticate, async (req, res) => {
       guardId,
       guardName,
       timestamp: new Date(),
-    })
+    });
 
-    await log.save()
-
+    await log.save();
 
     res.status(200).json({
       message: "Security log created successfully",
       log,
-    })
+    });
 
   } catch (error) {
-    console.error("Security log error:", error)
-    res.status(500).json({ message: "Server error creating security log" })
+    console.error("Security log error:", error);
+    res.status(500).json({ message: "Server error creating security log" });
   }
-})
+});
 
 router.get("/logs" , authenticate, async (req, res) => {
   console.log("Fetching security Logs")
   
-})
+});
 
-
-module.exports = router
+export default router;
