@@ -1,26 +1,26 @@
-const express = require("express")
-const User = require("../models/User")
-const { authenticate } = require("../middleware/auth");
-const adminAuth = require("../middleware/adminAuth");
+import express from "express";
+import User from "../models/User.js";
+import { authenticate } from "../middleware/auth.js";
+import adminAuth from "../middleware/adminAuth.js";
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/profile', authenticate, async (req, res) =>{
     try {
-        const user = await User.findOne({studentId : req.user.studentId})
+        const user = await User.findOne({studentId : req.user.studentId});
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        return res.status(200).json({message: "User Found!", userData : user})
+        return res.status(200).json({message: "User Found!", userData : user});
 
     } 
     catch (error) {
-        console.log("Error: ", error)
-        res.status(500)
+        console.log("Error: ", error);
+        res.status(500);
     }
-}) 
+});
 
 router.put('/profile', authenticate, async(req, res) => {
 
@@ -41,16 +41,16 @@ router.put('/profile', authenticate, async(req, res) => {
 
     await user.save();
 
-    return res.status(200).json({message : "User Data is Updated"})
+    return res.status(200).json({message : "User Data is Updated"});
 
-})
+});
 
 router.put('/passwordUpdate', authenticate, async (req, res) => {
-    const {confirmPassword, newPassword} = req.body.currentPassword
-    const user = await User.findOne( {studentId : req.user.studentId})
-    user.password = newPassword
-    await user.save()
-    return res.status(200).json({message: "Password Updated Successfully"})
-})
+    const {confirmPassword, newPassword} = req.body.currentPassword;
+    const user = await User.findOne( {studentId : req.user.studentId});
+    user.password = newPassword;
+    await user.save();
+    return res.status(200).json({message: "Password Updated Successfully"});
+});
 
-module.exports = router
+export default router;
