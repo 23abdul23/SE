@@ -85,6 +85,7 @@ export default function Scanner({ navigation }) {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
+          top: 20,
           padding: 16,
         }}
       >
