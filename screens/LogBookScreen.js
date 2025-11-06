@@ -69,7 +69,7 @@ export default function LogBook({ navigation, route }) {
   }, [fetchLogs])
 
   const iconColor = colors.icon || colors.text
-  const subTextColor = colors.subText || colors.subtext || colors.text
+  const subTextColor = "black"
 
   const renderLog = useCallback(
     ({ item }) => {
