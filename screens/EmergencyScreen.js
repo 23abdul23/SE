@@ -24,7 +24,6 @@ export default function EmergencyScreen() {
     {
       type: EMERGENCY_TYPES.MEDICAL,
       title: "Medical Emergency",
-      description: "Health issues, accidents, injuries",
       icon: "medical",
       color: COLORS.success,
       backgroundColor: COLORS.success + "20",
@@ -32,7 +31,6 @@ export default function EmergencyScreen() {
     {
       type: EMERGENCY_TYPES.SECURITY,
       title: "Security Emergency",
-      description: "Threats, harassment, unsafe situations",
       icon: "shield",
       color: COLORS.warning,
       backgroundColor: COLORS.warning + "20",
@@ -40,7 +38,6 @@ export default function EmergencyScreen() {
     {
       type: EMERGENCY_TYPES.FIRE,
       title: "Fire Emergency",
-      description: "Fire, smoke, evacuation needed",
       icon: "flame",
       color: COLORS.error,
       backgroundColor: COLORS.error + "20",
@@ -48,7 +45,6 @@ export default function EmergencyScreen() {
     {
       type: EMERGENCY_TYPES.OTHER,
       title: "Other Emergency",
-      description: "Any other urgent situation",
       icon: "alert-circle",
       color: COLORS.primary,
       backgroundColor: COLORS.primary + "20",
@@ -204,7 +200,7 @@ export default function EmergencyScreen() {
                   <Text style={[styles.contactPhone, { color: colors.text }]}>{contact.phone}</Text>
                 </View>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.text} />
+              <Ionicons name="chevron-forward" size={25} color={colors.text} />
             </TouchableOpacity>
           ))}
         </View> */}
@@ -277,7 +273,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 2,
   },
   contactInfo: {
     flexDirection: "row",
