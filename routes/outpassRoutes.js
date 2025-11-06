@@ -5,6 +5,8 @@ import Log from "../models/Log.js";
 import { authenticate } from "../middleware/auth.js";
 import adminAuth from "../middleware/adminAuth.js";
 import { checkOutpassExpiry } from "../middleware/outpassExpiry.js";
+import { ethers } from "ethers";
+import { contractAddress, contractABI } from "../utils/contract.js";
 
 const router = express.Router();
 
@@ -29,8 +31,8 @@ router.post("/generate", authenticate, async (req, res) => {
 
     // Validate input
     if (!purpose || !destination || !fromTime || !toTime) {
-      return res.status(400).json({ 
-        message: "Please provide all required fields: purpose, destination, fromTime, toTime" 
+      return res.status(400).json({
+        message: "Please provide all required fields: purpose, destination, fromTime, toTime"
       });
     }
 
@@ -47,8 +49,8 @@ router.post("/generate", authenticate, async (req, res) => {
     exitDateOnly.setHours(0, 0, 0, 0);
 
     if (exitDateOnly.getTime() !== today.getTime()) {
-      return res.status(400).json({ 
-        message: "Outpass can only be generated for the current day" 
+      return res.status(400).json({
+        message: "Outpass can only be generated for the current day"
       });
     }
 
@@ -56,14 +58,14 @@ router.post("/generate", authenticate, async (req, res) => {
     returnDateOnly.setHours(0, 0, 0, 0);
 
     if (returnDateOnly.getTime() !== today.getTime()) {
-      return res.status(400).json({ 
-        message: "Return time must be on the same day as exit time" 
+      return res.status(400).json({
+        message: "Return time must be on the same day as exit time"
       });
     }
 
     if (returnDate <= exitDate) {
-      return res.status(400).json({ 
-        message: "Expected return time must be after exit time" 
+      return res.status(400).json({
+        message: "Expected return time must be after exit time"
       });
     }
 
@@ -77,8 +79,8 @@ router.post("/generate", authenticate, async (req, res) => {
     });
 
     if (existingOutpass) {
-      return res.status(400).json({ 
-        message: "You already have an active outpass for today" 
+      return res.status(400).json({
+        message: "You already have an active outpass for today"
       });
     }
 
@@ -105,6 +107,33 @@ router.post("/generate", authenticate, async (req, res) => {
     });
 
     await outpass.save();
+
+    // Interact with the smart contract
+    try {
+        const provider = new ethers.providers.JsonRpcProvider(process.env.AMOY_RPC_URL);
+        const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+        const outpassContract = new ethers.Contract(contractAddress, contractABI, wallet);
+
+        const fromTimestamp = Math.floor(new Date(fromTime).getTime() / 1000);
+        const toTimestamp = Math.floor(new Date(toTime).getTime() / 1000);
+
+        const tx = await outpassContract.generateDayOutpass(
+            purpose.trim(),
+            destination.trim(),
+            fromTimestamp,
+            toTimestamp,
+            emergencyName || "",
+            emergencyContact || ""
+        );
+        await tx.wait();
+        console.log("Outpass generated on blockchain:", tx.hash);
+    } catch (contractError) {
+        console.error("Error interacting with smart contract:", contractError);
+        // If the contract interaction fails, we should ideally roll back the database change.
+        // For now, we'll log the error and send a specific error message.
+        // In a real-world app, you'd implement a more robust error handling and rollback mechanism.
+        return res.status(500).json({ message: "Server error interacting with the blockchain", error: contractError.message });
+    }
 
     await outpass.populate("userId", "name studentId hostel roomNumber");
 
@@ -148,9 +177,9 @@ router.get("/today", [authenticate, checkOutpassExpiry], async (req, res) => {
     }).populate("userId", "name studentId hostel roomNumber");
 
     if (!outpass) {
-      return res.json({ 
+      return res.json({
         message: "No outpass found for today",
-        outpass: null 
+        outpass: null
       });
     }
 
@@ -166,10 +195,10 @@ router.get("/today", [authenticate, checkOutpassExpiry], async (req, res) => {
       await outpass.save();
     }
 
-    res.json({ 
+    res.json({
       outpass,
       isActive: outpass.status === "approved" && outpass.expectedReturnDate > currentTime,
-      timeRemaining: outpass.status === "approved" ? 
+      timeRemaining: outpass.status === "approved" ?
         Math.max(0, outpass.expectedReturnDate.getTime() - currentTime.getTime()) : 0
     });
 
@@ -188,14 +217,14 @@ async function expireOldOutpasses() {
         status: { $in: ["pending", "approved"] },
         $or: [
           { expectedReturnDate: { $lt: currentDate } },
-          { 
+          {
             outDate: { $lt: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) },
             status: { $in: ["pending", "approved"] }
           }
         ]
       },
       {
-        $set: { 
+        $set: {
           status: "expired",
           $push: {
             auditTrail: {
