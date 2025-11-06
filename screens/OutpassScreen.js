@@ -1,7 +1,7 @@
 "use client"
 
 import { View, Text, TouchableOpacity, RefreshControl, Alert, FlatList } from "react-native"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { useTheme } from "../context/ThemeContext"
 import { useNavigation } from "@react-navigation/native"
@@ -23,13 +23,35 @@ export default function OutpassScreen() {
   const [refreshing, setRefreshing] = useState(false)
   const [activeFilter, setActiveFilter] = useState("all")
 
-  const filterOptions = [
-    { key: "all", label: "All", count: outpasses.length },
-    { key: "pending", label: "Pending", count: outpasses.filter((op) => op.status === "pending").length },
-    { key: "approved", label: "Approved", count: outpasses.filter((op) => op.status === "approved").length },
-    { key: "active", label: "Active", count: outpasses.filter((op) => op.status === "active").length },
-    { key: "completed", label: "Completed", count: outpasses.filter((op) => op.status === "completed").length },
-  ]
+  const statusCounts = useMemo(() => {
+    const counts = {
+      pending: 0,
+      approved: 0,
+      expired: 0,
+      cancelled: 0,
+      rejected: 0,
+    }
+
+    outpasses.forEach((item) => {
+      if (counts[item.status] !== undefined) {
+        counts[item.status] += 1
+      }
+    })
+
+    return counts
+  }, [outpasses])
+
+  const filterOptions = useMemo(
+    () => [
+      { key: "all", label: "All", count: outpasses.length },
+      { key: "pending", label: "Pending", count: statusCounts.pending },
+      { key: "approved", label: "Active", count: statusCounts.approved },
+      { key: "expired", label: "Expired", count: statusCounts.expired },
+      { key: "cancelled", label: "Cancelled", count: statusCounts.cancelled },
+      { key: "rejected", label: "Rejected", count: statusCounts.rejected },
+    ],
+    [outpasses.length, statusCounts],
+  )
 
   useEffect(() => {
     loadOutpasses()
@@ -41,16 +63,25 @@ export default function OutpassScreen() {
 
   const loadOutpasses = async () => {
     try {
-      const response = await outpass.getOutpasses()
+      const [todayResponse, historyResponse] = await Promise.all([
+        outpass.getOutpasses(),
+        outpass.getHistory({ limit: 50 }),
+      ])
 
-      // ✅ Handle "today" route returning a single object
-      if (response.data.outpass) {
-        setOutpasses([response.data.outpass]) // wrap in array
-      } else if (Array.isArray(response.data)) {
-        setOutpasses(response.data) // history route case
-      } else {
-        setOutpasses([])
+      let historyList = []
+      if (Array.isArray(historyResponse.data?.outpasses)) {
+        historyList = historyResponse.data.outpasses
+      } else if (Array.isArray(historyResponse.data)) {
+        historyList = historyResponse.data
       }
+
+      const todayOutpass = todayResponse.data?.outpass
+      if (todayOutpass) {
+        const exists = historyList.some((item) => item._id === todayOutpass._id)
+        historyList = exists ? historyList : [todayOutpass, ...historyList]
+      }
+
+      setOutpasses(historyList)
     } catch (error) {
       console.log("Outpass load error:", error)
       Alert.alert("Error", "Failed to load outpasses")
@@ -136,6 +167,15 @@ export default function OutpassScreen() {
         ListEmptyComponent={renderEmptyState}
         showsVerticalScrollIndicator={false}
       />
+
+      <TouchableOpacity
+        style={styles.floatingCreateButton}
+        onPress={handleCreateOutpass}
+        activeOpacity={0.85}
+      >
+        <Ionicons name="add" size={28} color={COLORS.white} />
+        <Text style={styles.floatingCreateLabel}>Create Outpass</Text>
+      </TouchableOpacity>
     </View>
   )
 }

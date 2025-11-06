@@ -353,6 +353,32 @@ router.post("/generate", authenticate, async (req, res) => {
 })
 
 
+// Get complete outpass history for the authenticated student
+router.get("/history", [authenticate, checkOutpassExpiry], async (req, res) => {
+  try {
+    const { status, limit } = req.query
+    const parsedLimit = Math.min(parseInt(limit, 10) || 25, 100)
+
+    const query = { userId: req.user._id }
+    if (status && typeof status === "string" && status.trim().length > 0) {
+      query.status = status.trim().toLowerCase()
+    }
+
+    // Make sure any stale outpasses are expired before returning history
+    await expireOldOutpasses()
+
+    const outpasses = await Outpass.find(query)
+      .sort({ createdAt: -1 })
+      .limit(parsedLimit)
+      .populate("userId", "name studentId hostel roomNumber")
+
+    res.json({ outpasses })
+  } catch (error) {
+    console.error("Outpass history fetch error:", error)
+    res.status(500).json({ message: "Server error fetching outpass history" })
+  }
+})
+
 // Get current day's outpass for user
 router.get("/today", [authenticate, checkOutpassExpiry], async (req, res) => {
   try {

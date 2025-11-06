@@ -1,38 +1,49 @@
 "use client"
 
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native"
+import { useMemo } from "react"
 import { COLORS, FONTS, SIZES, SPACING } from "../utils/constants"
 
 export default function FilterTabs({ options, activeFilter, onFilterChange }) {
+  const totalWidth = useMemo(() => options.length * 120, [options.length])
+
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.container}>
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option.key}
-          style={[styles.tab, activeFilter === option.key && styles.activeTab]}
-          onPress={() => onFilterChange(option.key)}
-        >
-          <Text style={[styles.tabText, activeFilter === option.key && styles.activeTabText]}>{option.label}</Text>
-          {option.count > 0 && (
-            <View style={[styles.badge, activeFilter === option.key && styles.activeBadge]}>
-              <Text style={[styles.badgeText, activeFilter === option.key && styles.activeBadgeText]}>
-                {option.count}
-              </Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[styles.scrollContent, { minWidth: totalWidth }]}
+      >
+        {options.map((option) => (
+          <TouchableOpacity
+            key={option.key}
+            style={[styles.tab, activeFilter === option.key && styles.activeTab]}
+            onPress={() => onFilterChange(option.key)}
+          >
+            <Text style={[styles.tabText, activeFilter === option.key && styles.activeTabText]}>{option.label}</Text>
+            {option.count > 0 && (
+              <View style={[styles.badge, activeFilter === option.key && styles.activeBadge]}>
+                <Text style={[styles.badgeText, activeFilter === option.key && styles.activeBadgeText]}>
+                  {option.count}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray[200],
+  },
+  scrollContent: {
+    paddingHorizontal: SPACING.lg,
   },
   tab: {
     flexDirection: "row",
