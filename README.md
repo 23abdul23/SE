@@ -22,17 +22,17 @@ _Do not run the above example as-is—replace with your details._
 
 - Create a `.env` file in the project root with the following content:
 
-
-MONGODB_URI=mongodb://localhost:27017/aegis-id
-
+```
+MONGODB_URI= mongodb://localhost:27017/aegis-id
+MONGODB_URI_C = <mongo db atlas cluster uri>
 JWT_SECRET=secret
-
 JWT_EXPIRE=7d
-
 API_HOST=YOUR_LAPTOP_IP
-
 PORT=3000
-
+DATABASE=CLOUD  <For local development set this to LOCAL>
+GMAIL_ID=aegisid777@gmail.com
+GMAIL_PASSWORD= <your google oauth app password>
+```
 
 - **Tip:** Install MongoDB and MongoDB Compass for database management.
 
@@ -52,52 +52,11 @@ In the `SE` folder, run:
 
 ---
 
-## 4️⃣ Install Android Studio & SDK
-
-1. [Download Android Studio](https://developer.android.com/studio)
-2. During setup, install:
- - Android SDK
- - Android SDK Platform Tools
- - Android Emulator
-3. Add Android SDK to your system `PATH`:
- - **Linux/macOS:**
-   ```
-   export ANDROID_HOME=$HOME/Android/Sdk
-   export PATH=$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
-   ```
-   - Add to your `~/.bashrc` or `~/.zshrc`
-   - Reload your shell:
-     ```
-     source ~/.bashrc
-     ```
- - **Windows:**  
-   Edit Environment Variables in System Properties.
-
----
-
-## 5️⃣ Run on Android Device or Emulator
-
-### Option A: Real Device (Recommended)
-
-1. Enable Developer Options & USB Debugging on your phone.
-2. Connect the device via USB.
-3. Verify connection:
-`adb devices`
-
-
-### Option B: Emulator
-
-1. Open Android Studio → Device Manager
-2. Create a new Virtual Device (Pixel, API 34 recommended)
-3. Start the emulator
-
----
-
-## 6️⃣ Start the App
+## 4️⃣ Start the App
 
 In the `SE` folder, run:
 
-`npx expo start --tunnel`
+`npx expo start`
 
 
 Metro Bundler will start, and the app will launch on your device or emulator.
@@ -116,17 +75,7 @@ Metro Bundler will start, and the app will launch on your device or emulator.
 ---
 
 ## 8️⃣ Troubleshooting
-
-- **Error: `spawn adb ENOENT`**  
-Ensure `adb` is in your system `PATH`.
-- **Device not detected**  
-Try:
-
-`adb kill-server`
-`adb start-server`
-`adb devices`
-
-- **Further issues?** Contact Abdul for assistance.
+Contact Abdul for assistance.
 
 ---
 
@@ -134,24 +83,9 @@ Try:
 
 Follow these steps to connect your phone app to the backend server running on your laptop:
 
-### Step 1: Find Your Laptop's IP Address
-```bash
-# Windows Command Prompt
-ipconfig
+### Step 1: Connect your Mobile devices and Laptops to a common WIFI Network
 
-# Look for "IPv4 Address" under your active network adapter
-# Example: 192.168.1.100 or 172.19.x.x
-```
-
-### Step 2: Update API Configuration
-1. Open `.env` file
-2. Replace the IP address in `YOUR_LAPTOP_IP` with your laptop's IP OR Edit in the `./ server/api.js`
-```javascript
-const API_BASE_URL = `http://YOUR_LAPTOP_IP:3000/api`;
-// Example: const API_BASE_URL = `http://192.168.1.100:3000/api`;
-```
-
-### Step 3: Configure Windows Firewall (Windows Users)
+### Step 2: Configure Windows Firewall (Windows Users) (OPTIONAL)
 1. **Windows Security** → **Firewall & network protection**
 2. **Allow an app through firewall** → **Change Settings**
 3. **Allow another app** → Browse and select **Node.js** 
@@ -159,7 +93,7 @@ const API_BASE_URL = `http://YOUR_LAPTOP_IP:3000/api`;
 4. Check both **Private** and **Public** network boxes
 5. Click **OK**
 
-### Step 4: Start Backend Server
+### Step 3: Start Backend Server
 ```bash
 # In your SE folder
 nodemon server.js
@@ -169,15 +103,15 @@ nodemon server.js
 # 📦 MongoDB Connected: localhost
 ```
 
-### Step 5: Start Expo Development Server
+### Step 4: Start Expo Development Server
 ```bash
 # In your SE folder
-npx expo start --tunnel
+npx expo start 
 
 # This will show a QR code in your terminal
 ```
 
-### Step 6: Connect Your Phone
+### Step 5: Connect Your Phone
 1. **Ensure both devices are on the same WiFi network**
 2. **Download Expo Go app** from:
    - [Play Store (Android)](https://play.google.com/store/apps/details?id=host.exp.exponent)
@@ -186,7 +120,7 @@ npx expo start --tunnel
    - Android: Open Expo Go → Scan QR code from terminal
    - iOS: Use Camera app → Scan QR code → Tap notification
 
-### Step 7: Test Connection
+### Step 6: Test Connection
 1. **Test API from phone browser**:
    - Open browser on phone
    - Navigate to: `http://YOUR_LAPTOP_IP:3000/api/health`
@@ -242,6 +176,4 @@ npx expo start --lan
 ## Need Help?
 
 If you encounter any problems or installation difficulties, contact -O- Abdul ASAP (Raat me mat pareshan Karna).
-
-ok
 ---
