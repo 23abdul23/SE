@@ -2,6 +2,8 @@
 
 Aegis ID is a **mobile-first digital identity and access management system** designed to replace traditional college ID cards and manual entry processes. It offers a secure, fast, and modern way for students, wardens, and campus security to interact within the campus ecosystem.
 
+📥 **Installation Guide:** [Click here to view installation.md](installation.md)
+
 ---
 
 ## 🚀 What Our App Does
