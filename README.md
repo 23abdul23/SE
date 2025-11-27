@@ -1,181 +1,152 @@
-# 📱 Mobile App Setup Guide
+# Aegis ID – Your Secure Digital Campus Pass
 
-This document provides setup instructions for the React Native + Expo mobile app project. Follow these steps to fork the repository, install dependencies, configure Android Studio, set up the backend server, and run the app on a real device or emulator.
-
-Follow installation.md to install all dependecies required for the project.
+Aegis ID is a **mobile-first digital identity and access management system** designed to replace traditional college ID cards and manual entry processes. It offers a secure, fast, and modern way for students, wardens, and campus security to interact within the campus ecosystem.
 
 ---
 
-## 1️⃣ Fork & Clone the Repository
+## 🚀 What Our App Does
 
-- Fork the repository to your GitHub account.
-- Clone your forked repository:
+### **1. Digital Campus ID (Dynamic Passkey System)**
+Aegis ID generates a **daily encrypted passkey** (QR/NFC) for students.
 
+- Automatically refreshes
+- Bound to the student's device
+- Screenshot-protected (non-shareable)
+- Can be scanned at gates for access validation
 
-_Example:_  
-`git clone https://github.com/23abdul23/SE.git`  
-`cd SE`
-
-_Do not run the above example as-is—replace with your details._
-
----
-
-## 2️⃣ Set Up Environment Variables
-
-- Create a `.env` file in the project root with the following content:
-
-```
-MONGODB_URI= mongodb://localhost:27017/aegis-id
-MONGODB_URI_C = <mongo db atlas cluster uri>
-JWT_SECRET=secret
-JWT_EXPIRE=7d
-API_HOST=YOUR_LAPTOP_IP
-PORT=3000
-DATABASE=CLOUD  <For local development set this to LOCAL>
-GMAIL_ID=aegisid777@gmail.com
-GMAIL_PASSWORD= <your google oauth app password>
-```
-
-- **Tip:** Install MongoDB and MongoDB Compass for database management.
+This eliminates the need for physical ID cards and reduces misuse or proxy entries.
 
 ---
 
-## 3️⃣ Install Dependencies
+## 🎒 Outpass Management
 
-In the `SE` folder, run:
+The app fully digitizes the outpass system:
 
-`npm install`
+- Students submit outpass requests  
+- Wardens approve or reject with a single tap  
+- Students receive instant notifications  
+- All actions are logged for transparency  
 
-`npm install --legacy-peer-deps` If some error arises
-
-`npm install -g expo-cli`
-
-
-
----
-
-## 4️⃣ Start the App
-
-In the `SE` folder, run:
-
-`npx expo start`
-
-
-Metro Bundler will start, and the app will launch on your device or emulator.
+No more queues, registers, or manual paperwork.
 
 ---
 
-## 7️⃣ Start the Backend Server
+## 🚨 Emergency Support
 
-- To start the backend server, run the following command in your `SE` folder:
+Aegis ID includes a **one-tap emergency alert system**:
 
-`nodemon server.js`
+- Instantly call security or ambulance  
+- App auto-shares GPS location  
+- Emergency logged and tracked by campus authorities  
 
-
-- Ensure nodemon is installed (`npm install -g nodemon` if needed).
-
----
-
-## 8️⃣ Troubleshooting
-Contact Abdul for assistance.
+Ensures quick response during critical situations.
 
 ---
 
-## 9️⃣ Connect Phone to Server (Complete Setup)
+## 🔒 Secure Authentication & User Management
 
-Follow these steps to connect your phone app to the backend server running on your laptop:
+The system is built with strong security practices:
 
-### Step 1: Connect your Mobile devices and Laptops to a common WIFI Network
+- JWT-based authentication  
+- Bcrypt password hashing  
+- SHA-256 encrypted passkeys  
+- Role-based access: Student / Warden / Security / Admin  
 
-### Step 2: Configure Windows Firewall (Windows Users) (OPTIONAL)
-1. **Windows Security** → **Firewall & network protection**
-2. **Allow an app through firewall** → **Change Settings**
-3. **Allow another app** → Browse and select **Node.js** 
-   - Usually located at: `C:\Program Files\nodejs\node.exe`
-4. Check both **Private** and **Public** network boxes
-5. Click **OK**
+Admins can manage users, logs, and system policies efficiently.
 
-### Step 3: Start Backend Server
-```bash
-# In your SE folder
-nodemon server.js
-
-# You should see:
-# 🚀 Aegis ID Backend running on port 3000
-# 📦 MongoDB Connected: localhost
-```
-
-### Step 4: Start Expo Development Server
-```bash
-# In your SE folder
-npx expo start 
-
-# This will show a QR code in your terminal
-```
-
-### Step 5: Connect Your Phone
-1. **Ensure both devices are on the same WiFi network**
-2. **Download Expo Go app** from:
-   - [Play Store (Android)](https://play.google.com/store/apps/details?id=host.exp.exponent)
-   - [App Store (iOS)](https://apps.apple.com/app/expo-go/id982107779)
-3. **Scan QR Code**:
-   - Android: Open Expo Go → Scan QR code from terminal
-   - iOS: Use Camera app → Scan QR code → Tap notification
-
-### Step 6: Test Connection
-1. **Test API from phone browser**:
-   - Open browser on phone
-   - Navigate to: `http://YOUR_LAPTOP_IP:3000/api/health`
-   - Should show: `{"status":"OK","message":"Aegis ID Backend is running"}`
-
-2. **Test App Registration**:
-   - Open the app on your phone
-   - Try registering a new user
-   - Check your laptop terminal for incoming requests
-
-### Troubleshooting Connection Issues
-
-**Problem: "Network Error" when registering**
-```bash
-# 1. Verify server is running
-curl http://localhost:3000/api/health
-
-# 2. Check if port 3000 is accessible
-netstat -an | findstr :3000
-
-# 3. Test from phone browser
-# Go to: http://YOUR_LAPTOP_IP:3000/api/health
-```
-
-**Problem: Can't connect to laptop**
-- ✅ Both devices on same WiFi network
-- ✅ Windows Firewall allows Node.js
-- ✅ Correct IP address in `services/api.js`
-- ✅ Backend server is running on port 3000
-
-**Problem: QR Code doesn't work**
-```bash
-# Try tunnel mode for better connectivity
-npx expo start --tunnel
-
-# Or use direct connection
-npx expo start --lan
-```
-**Some npm related Issues:**
-- run `npm install -g expo-cli`
-- run `npm install`
-- run `npx expo install expo-camera`
-
-
-### Expected Flow
-1. **Phone** → Sends registration data → **Laptop API**
-2. **Laptop** → Processes request → **MongoDB Database**  
-3. **Laptop** → Returns response → **Phone App**
-4. **Registration success/failure** shown on phone
-   
 ---
 
-## Need Help?
+## 📱 Modern Mobile-First UI
 
-If you encounter any problems or installation difficulties, contact -O- Abdul ASAP (Raat me mat pareshan Karna).
+Built using **React Native**, the app provides:
+
+- Dashboard (Passkey | Outpass | Scan | Emergency)
+- Profile management
+- Outpass creation & tracking
+- QR scanning interface
+- Emergency alert screen
+
+Clean UI, smooth navigation, and fast response time.
+
 ---
+
+## ⚙️ Gate Access (QR / NFC)
+
+Security guards can validate entries through:
+
+- Scanning student's QR code  
+- Reading NFC tags (supported devices)
+
+Backend verifies:
+
+- Token validity  
+- Device ID match  
+- Expiry time  
+- Student role/status  
+
+Result: Instant **Access Granted / Access Denied** response.
+
+---
+
+## 🧬 Core Features Summary
+
+- ✔️ Daily dynamic encrypted passkeys  
+- ✔️ QR & NFC access  
+- ✔️ Device-bound, non-shareable tokens  
+- ✔️ Digital outpass workflow  
+- ✔️ Emergency alerts with live location  
+- ✔️ Profile and account management  
+- ✔️ Role-based dashboards  
+- ✔️ Secure backend with audit logs  
+
+---
+
+## 🏗️ Tech Stack
+
+### **Frontend**
+- React Native  
+- Figma (UI Design)
+
+### **Backend**
+- Node.js / Express  
+- MongoDB  
+- JWT, Bcrypt, SHA-256  
+- Optional Blockchain-based logging
+
+### **Hardware**
+- NFC Readers  
+- QR Scanners  
+- Mobile Cameras  
+
+---
+
+## 👥 User Roles
+
+- **Students** – Generate passkeys, request outpasses, emergency alerts  
+- **Wardens** – Approve/reject outpasses  
+- **Security Staff** – Validate QR/NFC, view emergencies  
+- **Admins** – Manage users and system configuration  
+
+---
+
+## 📝 Why Aegis ID?
+
+- Replaces outdated manual systems  
+- Eliminates fake entries or ID misuse  
+- Faster gate verification  
+- Safer campus with emergency tracking  
+- Fully digital, highly scalable, and secure  
+
+---
+
+## 📄 License
+
+This project is part of **CS301 – Software Engineering** at **IIIT Allahabad**.
+
+---
+
+## 📬 Contact
+
+For development or contribution queries, reach out to the team.
+
+
