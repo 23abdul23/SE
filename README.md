@@ -2,6 +2,8 @@
 
 This document provides setup instructions for the React Native + Expo mobile app project. Follow these steps to fork the repository, install dependencies, configure Android Studio, set up the backend server, and run the app on a real device or emulator.
 
+Follow installation.md to install all dependecies required for the project.
+
 ---
 
 ## 1️⃣ Fork & Clone the Repository
